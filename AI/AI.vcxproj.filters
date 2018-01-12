@@ -1,0 +1,203 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Reversi Lab">
+      <UniqueIdentifier>{f5282c74-4285-4113-8c45-75e914596172}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Queen Lab">
+      <UniqueIdentifier>{efda6c99-baaf-473c-829c-f9868acbce6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TurnBase &amp; Hex Maze">
+      <UniqueIdentifier>{89ae6f25-0f49-4d0d-a4a2-07a45ae60042}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SceneMaze">
+      <UniqueIdentifier>{424e8e75-db36-404d-bf55-c15f6984821d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject">
+      <UniqueIdentifier>{f318a38b-0f30-4505-b72c-e5e664d4041a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Maze">
+      <UniqueIdentifier>{55c604de-3730-44f6-b13b-176d1b96459c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Message &amp; State">
+      <UniqueIdentifier>{3bc9d44c-0cf0-4a2d-bc25-817587cc4e9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Message &amp; State\ObjectBase">
+      <UniqueIdentifier>{127fd32b-d38f-481b-9e57-1591ba8b03f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Message &amp; State\State">
+      <UniqueIdentifier>{03c2bca7-ebdf-4704-a778-937848e0036a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Message &amp; State\State\Manager">
+      <UniqueIdentifier>{757fbc2b-9f35-4d21-b6ba-1ca86bfea7f9}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\Application.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LoadOBJ.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LoadTGA.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Mesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MeshBuilder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\shader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Utility.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneMovement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PostOffice.cpp">
+      <Filter>Message &amp; State</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneReversi.cpp">
+      <Filter>Reversi Lab</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneQueen.cpp">
+      <Filter>Queen Lab</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneMaze.cpp">
+      <Filter>SceneMaze</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneHex.cpp">
+      <Filter>TurnBase &amp; Hex Maze</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneTurn.cpp">
+      <Filter>TurnBase &amp; Hex Maze</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameObject.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Maze.cpp">
+      <Filter>Maze</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\State.cpp">
+      <Filter>Message &amp; State\State\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\StateMachineManager.cpp">
+      <Filter>Message &amp; State\State\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Message.cpp">
+      <Filter>Message &amp; State</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\Application.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Geometry.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Light.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\LoadOBJ.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\LoadTGA.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Material.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MeshBuilder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\shader.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Vertex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneMovement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PostOffice.h">
+      <Filter>Message &amp; State</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ConcreteMessages.h">
+      <Filter>Message &amp; State</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneReversi.h">
+      <Filter>Reversi Lab</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneQueen.h">
+      <Filter>Queen Lab</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneMaze.h">
+      <Filter>SceneMaze</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneHex.h">
+      <Filter>TurnBase &amp; Hex Maze</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneTurn.h">
+      <Filter>TurnBase &amp; Hex Maze</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ObjectBase.h">
+      <Filter>Message &amp; State\ObjectBase</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameObject.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Maze.h">
+      <Filter>Maze</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\State.h">
+      <Filter>Message &amp; State\State</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\StateMachineManager.h">
+      <Filter>Message &amp; State\State\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Message.h">
+      <Filter>Message &amp; State</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

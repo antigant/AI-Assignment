@@ -30,6 +30,20 @@ void SceneTurn::Init()
 	m_gridSize = m_worldHeight / m_noGrid;
 	m_gridOffset = m_gridSize / 2;
 
+	// Enable fog
+	fog = true;
+
+	fogList.resize(m_noGrid * m_noGrid);
+	std::fill(fogList.begin(), fogList.end(), Maze::FOG::UNSEEN);
+
+	// Player
+	player = FetchGO("Player");
+	//player->SetPosition(Vector3(5.f, 5.f, 0.f));
+	//fogList[player->GetPosition().y * m_noGrid + player->GetPosition().x] = Maze::FOG::SEEN;
+	//fogList[(player->GetPosition().y + 1) * m_noGrid + player->GetPosition().x] = Maze::FOG::SEEN;
+	//fogList[(player->GetPosition().y - 1) * m_noGrid + player->GetPosition().x] = Maze::FOG::SEEN;
+	//fogList[player->GetPosition().y * m_noGrid + (player->GetPosition().x + 1)] = Maze::FOG::SEEN;
+
 	m_start.Set(0, 0);
 	m_mazeKey = 0;
 	m_wallLoad = 0.3f;
@@ -51,14 +65,14 @@ GameObject* SceneTurn::FetchGO(std::string type)
 	for (std::vector<GameObject *>::iterator it = m_goList.begin(); it != m_goList.end(); ++it)
 	{
 		GameObject *go = (GameObject *)*it;
-		if (!go->GetActive())
+		if (!go->GetActive() && go->GetType() == type)
 		{
 			go->SetActive(true);
 			++m_objectCount;
 			return go;
 		}
 	}
-	for (unsigned i = 0; i < 10; ++i)
+	for (unsigned i = 0; i < 2; ++i)
 	{
 		GameObject *go = new GameObject(type);
 		m_goList.push_back(go);
@@ -419,9 +433,53 @@ bool SceneTurn::BFSLimit(GameObject * go, MazePt end, int limit)
 	return false;
 }
 
+void SceneTurn::PlayerVisibility()
+{
+	// Standing position
+	if (player->GetPosition().x < 0 || player->GetPosition().x + 1 > m_noGrid || player->GetPosition().y < 0 || player->GetPosition().y + 1 > m_noGrid)
+		return;
+
+	fogList[player->GetPosition().y * m_noGrid + player->GetPosition().x] = Maze::FOG::SEEN;
+
+	if (player->GetPosition().x - 1 >= 0) // x position
+		fogList[player->GetPosition().y * m_noGrid + (player->GetPosition().x - 1)] = Maze::FOG::SEEN;
+	if (player->GetPosition().x + 1 < m_noGrid)
+		fogList[player->GetPosition().y * m_noGrid + (player->GetPosition().x + 1)] = Maze::FOG::SEEN;
+	if (player->GetPosition().y - 1 >= 0) // y position
+		fogList[(player->GetPosition().y - 1) * m_noGrid + player->GetPosition().x] = Maze::FOG::SEEN;
+	if (player->GetPosition().y + 1 < m_noGrid)
+		fogList[(player->GetPosition().y + 1) * m_noGrid + player->GetPosition().x] = Maze::FOG::SEEN;
+
+	//if (player->GetPosition().x - 1 > 0) // x position
+	//{
+	//	fogList[player->GetPosition().y * m_noGrid + (player->GetPosition().x - 1)] = Maze::FOG::SEEN;
+	//	if(player->GetPosition().x + 1 < m_noGrid)
+	//		fogList[player->GetPosition().y * m_noGrid + (player->GetPosition().x + 1)] = Maze::FOG::UNSEEN;
+	//}
+	//if (player->GetPosition().x + 1 < m_noGrid)
+	//{
+	//	fogList[player->GetPosition().y * m_noGrid + (player->GetPosition().x + 1)] = Maze::FOG::SEEN;
+	//	if(player->GetPosition().x - 1 > 0)
+	//		fogList[player->GetPosition().y * m_noGrid + (player->GetPosition().x - 1)] = Maze::FOG::UNSEEN;
+	//}
+	//if (player->GetPosition().y - 1 > 0) // y position
+	//{
+	//	fogList[(player->GetPosition().y - 1) * m_noGrid + player->GetPosition().x] = Maze::FOG::SEEN;
+	//	if (player->GetPosition().y + 1 < m_noGrid)
+	//		fogList[(player->GetPosition().y + 1) * m_noGrid + player->GetPosition().x] = Maze::FOG::UNSEEN;
+	//}
+	//if (player->GetPosition().y + 1 < m_noGrid)
+	//{
+	//	fogList[(player->GetPosition().y + 1) * m_noGrid + player->GetPosition().x] = Maze::FOG::SEEN;
+	//	if(player->GetPosition().y - 1 > 0)
+	//		fogList[(player->GetPosition().y - 1) * m_noGrid + player->GetPosition().x] = Maze::FOG::UNSEEN;
+	//}
+}
+
 void SceneTurn::Update(double dt)
 {
 	SceneBase::Update(dt);
+	PlayerVisibility();
 
 	//Calculating aspect ratio
 	m_worldHeight = 100.f;
@@ -448,6 +506,15 @@ void SceneTurn::Update(double dt)
 	{
 		//Exercise: Implement Reset button
 	}
+
+	if (Application::IsKeyPressed('W'))
+		player->SetPosition(Vector3(player->GetPosition().x, player->GetPosition().y + 1, player->GetPosition().z));
+	if (Application::IsKeyPressed('S'))
+		player->SetPosition(Vector3(player->GetPosition().x, player->GetPosition().y - 1, player->GetPosition().z));
+	if (Application::IsKeyPressed('A'))
+		player->SetPosition(Vector3(player->GetPosition().x - 1, player->GetPosition().y, player->GetPosition().z));
+	if (Application::IsKeyPressed('D'))
+		player->SetPosition(Vector3(player->GetPosition().x + 1, player->GetPosition().y, player->GetPosition().z));
 
 	//Input Section
 	static bool bLButtonState = false;
@@ -565,14 +632,12 @@ void SceneTurn::Update(double dt)
 
 void SceneTurn::RenderGO(GameObject *go)
 {
+	modelStack.PushMatrix();
+	modelStack.Translate(go->curr.x * m_gridSize + m_gridOffset, go->curr.y * m_gridSize + m_gridOffset, 1.f);
+	modelStack.Scale(m_gridSize, m_gridSize, m_gridSize);
 	if (go->GetType() == "NPC")
-	{
-		modelStack.PushMatrix();
-		modelStack.Translate(go->curr.x * m_gridSize + m_gridOffset, go->curr.y * m_gridSize + m_gridOffset, 1.f);
-		modelStack.Scale(m_gridSize, m_gridSize, m_gridSize);
-		RenderMesh(meshList[GEO_QUEEN], false);
-		modelStack.PopMatrix();
-	}
+		RenderMesh(meshList[GEO_ENEMY], false);
+	modelStack.PopMatrix();
 }
 
 void SceneTurn::Render()
@@ -603,28 +668,35 @@ void SceneTurn::Render()
 	modelStack.PopMatrix();
 
 	//Render tiles 
-	for (int row = 0; row < m_noGrid; ++row)
+	if (fog)
 	{
-		for (int col = 0; col < m_noGrid; ++col)
+		for (int row = 0; row < m_noGrid; ++row)
 		{
-			modelStack.PushMatrix();
-			modelStack.Translate(m_gridOffset + m_gridSize * col, m_gridOffset + m_gridSize * row, 0);
-			modelStack.Scale(m_gridSize, m_gridSize, m_gridSize);
-			switch (m_myGrid[row * m_noGrid + col])
+			for (int col = 0; col < m_noGrid; ++col)
 			{
-			case Maze::TILE_WALL:
-				RenderMesh(meshList[GEO_GREYQUAD], false);
-				break;
-			case Maze::TILE_FOG:
-				RenderMesh(meshList[GEO_BLACKQUAD], false);
-				break;
-			case Maze::TILE_EMPTY:
-				RenderMesh(meshList[GEO_WHITEQUAD], false);
-				break;
+				modelStack.PushMatrix();
+				modelStack.Translate(m_gridOffset + m_gridSize * col, m_gridOffset + m_gridSize * row, 0);
+				modelStack.Scale(m_gridSize, m_gridSize, m_gridSize);
+
+				if (fogList[row * m_noGrid + col] == Maze::FOG::SEEN)
+				{
+					switch (m_maze.m_grid[row * m_noGrid + col])
+					{
+					case Maze::TILE_WALL:
+						RenderMesh(meshList[GEO_GREYQUAD], false);
+						break;
+					case Maze::TILE_EMPTY:
+						RenderMesh(meshList[GEO_WHITEQUAD], false);
+						break;
+					}
+				}
+				else
+					RenderMesh(meshList[GEO_BLACKQUAD], false);
+				modelStack.PopMatrix();
 			}
-			modelStack.PopMatrix();
 		}
 	}
+
 	//Render curr point
 	//MazePt curr = m_maze.GetCurr();
 	//modelStack.PushMatrix();
@@ -641,6 +713,13 @@ void SceneTurn::Render()
 	//	RenderMesh(meshList[GEO_QUEEN], false);
 	//	modelStack.PopMatrix();
 	//}
+
+	modelStack.PushMatrix();
+	modelStack.Translate(m_gridOffset + m_gridSize * player->GetPosition().x, m_gridOffset + m_gridSize * player->GetPosition().y, 1.f);
+	modelStack.Scale(m_gridSize, m_gridSize, m_gridSize);
+	RenderMesh(meshList[GEO_PLAYER], false);
+	modelStack.PopMatrix();
+
 	//Render m_goList
 	for (std::vector<GameObject *>::iterator it = m_goList.begin(); it != m_goList.end(); ++it)
 	{

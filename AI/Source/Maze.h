@@ -26,6 +26,13 @@ public:
 		DIR_LEFT,
 		DIR_RIGHT,
 	};
+
+	enum FOG
+	{
+		SEEN,
+		UNSEEN,
+	};
+
 	Maze();
 	~Maze();
 	void Generate(unsigned key, unsigned size, MazePt start, float wallLoad);

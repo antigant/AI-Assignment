@@ -60,6 +60,9 @@ public:
 		GEO_BLACKQUAD,
 		GEO_GREYQUAD,
 
+		GEO_PLAYER,
+		GEO_ENEMY,
+
 		NUM_GEOMETRY,
 	};
 public:

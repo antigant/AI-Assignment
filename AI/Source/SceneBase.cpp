@@ -132,10 +132,14 @@ void SceneBase::Init()
 
 	// +=+=+=+=+=+=+=+=+=+=+=+=+= Lab 7  +=+=+=+=+=+=+=+=+=+=+=+=+= //
 	meshList[GEO_WHITEQUAD] = MeshBuilder::GenerateQuad("white quad", Color(1.f, 1.f, 1.f));
-	meshList[GEO_BLACKQUAD] = MeshBuilder::GenerateQuad("white quad", Color(0.f, 0.f, 0.f));
-	meshList[GEO_GREYQUAD] = MeshBuilder::GenerateQuad("white quad", Color(0.54f, 0.54f, 0.54f));
+	meshList[GEO_BLACKQUAD] = MeshBuilder::GenerateQuad("black quad", Color(0.f, 0.f, 0.f));
+	meshList[GEO_GREYQUAD] = MeshBuilder::GenerateQuad("grey quad", Color(0.54f, 0.54f, 0.54f));
 	// +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+= //
 
+	meshList[GEO_PLAYER] = MeshBuilder::GenerateQuad("player", Color(1.f, 1.f, 1.f));
+	meshList[GEO_PLAYER]->textureID = LoadTGA("Image//player.tga");
+	meshList[GEO_ENEMY] = MeshBuilder::GenerateQuad("enemy", Color(1.f, 1.f, 1.f));
+	meshList[GEO_ENEMY]->textureID = LoadTGA("Image//enemy.tga");
 
 	bLightEnabled = false;
 }

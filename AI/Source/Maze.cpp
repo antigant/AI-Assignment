@@ -91,8 +91,9 @@ void Maze::SetNumMove(int num)
 
 Maze::TILE_CONTENT Maze::See(MazePt tile)
 {
-
-	return m_grid[tile.x + tile.y * m_size];
+	//if(tile.x >= 0 && tile.x < m_size && tile.y >= 0 && tile.y < m_size)
+		return m_grid[tile.x + tile.y * m_size];
+	//return TILE_CONTENT::TILE_FOG;
 }
 
 bool Maze::Move(DIRECTION direction)

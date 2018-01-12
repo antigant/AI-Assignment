@@ -28,6 +28,9 @@ public:
 	int m_turn;
 	double timer;
 
+private:
+	void PlayerVisibility();
+
 protected:
 
 	std::vector<GameObject *> m_goList;
@@ -49,6 +52,11 @@ protected:
 	std::vector<MazePt> m_shortestPath;  //to store shortest path
 	unsigned m_mazeKey;
 	float m_wallLoad;
+
+	bool fog;
+	std::vector<Maze::FOG> fogList;
+
+	GameObject *player;
 };
 
 #endif

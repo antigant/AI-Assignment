@@ -165,6 +165,7 @@
     <ClCompile Include="Source\Mesh.cpp" />
     <ClCompile Include="Source\MeshBuilder.cpp" />
     <ClCompile Include="Source\Message.cpp" />
+    <ClCompile Include="Source\Player.cpp" />
     <ClCompile Include="Source\PostOffice.cpp" />
     <ClCompile Include="Source\SceneBase.cpp" />
     <ClCompile Include="Source\SceneData.cpp" />
@@ -194,6 +195,7 @@
     <ClInclude Include="Source\MeshBuilder.h" />
     <ClInclude Include="Source\Message.h" />
     <ClInclude Include="Source\ObjectBase.h" />
+    <ClInclude Include="Source\Player.h" />
     <ClInclude Include="Source\PostOffice.h" />
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\SceneBase.h" />

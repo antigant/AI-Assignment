@@ -27,29 +27,49 @@ void Maze::Generate(unsigned key, unsigned size, MazePt start, float wallLoad)
 	std::fill(m_grid.begin(), m_grid.end(), TILE_EMPTY);
 	unsigned startId = start.y * size + start.x;
 	srand(key);
-	for (int i = 0; i < (int)total * wallLoad;)
+
+	int NumberOfDoors = 0;
+	for (int i = (int)total * wallLoad; i >= 0;)
 	{
 		unsigned chosen = rand() % total;
 		if (chosen == startId)
 			continue;
 		if (m_grid[chosen] == TILE_EMPTY)
 		{
-			m_grid[chosen] = TILE_WALL;
-			++i;
-		}
-	}
-	std::cout << "Maze " << key << std::endl;
-	for (int row = (int)size - 1; row >= 0; --row)
-	{
-		for (int col = 0; col < (int)size; ++col)
-		{
-			if (m_grid[row * size + col] == TILE_WALL)
-				std::cout << "1 ";
+			int random = Math::RandIntMinMax(1, 2);
+			if (random == 1 && NumberOfDoors == 0)
+			{
+				m_grid[chosen] = TILE_DOOR;
+				++NumberOfDoors;
+			}
 			else
-				std::cout << "0 ";
+				m_grid[chosen] = TILE_WALL;
+			--i;
 		}
-		std::cout << std::endl;
 	}
+	//for (int i = 0; i < (int)total * wallLoad;)
+	//{
+	//	unsigned chosen = rand() % total;
+	//	if (chosen == startId)
+	//		continue;
+	//	if (m_grid[chosen] == TILE_EMPTY)
+	//	{
+	//		m_grid[chosen] = TILE_WALL;
+	//		++i;
+	//	}
+	//}
+	//std::cout << "Maze " << key << std::endl;
+	//for (int row = (int)size - 1; row >= 0; --row)
+	//{
+	//	for (int col = 0; col < (int)size; ++col)
+	//	{
+	//		if (m_grid[row * size + col] == TILE_WALL)
+	//			std::cout << "1 ";
+	//		else
+	//			std::cout << "0 ";
+	//	}
+	//	std::cout << std::endl;
+	//}
 	m_key = key;
 	m_size = size;
 	m_numMove = 0;

@@ -39,6 +39,9 @@
     <Filter Include="Message &amp; State\State\Manager">
       <UniqueIdentifier>{757fbc2b-9f35-4d21-b6ba-1ca86bfea7f9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="TurnBase &amp; Hex Maze\Assignment2">
+      <UniqueIdentifier>{8cad94c2-fdb6-4ad0-a192-64b38c993628}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -92,9 +95,6 @@
     <ClCompile Include="Source\SceneHex.cpp">
       <Filter>TurnBase &amp; Hex Maze</Filter>
     </ClCompile>
-    <ClCompile Include="Source\SceneTurn.cpp">
-      <Filter>TurnBase &amp; Hex Maze</Filter>
-    </ClCompile>
     <ClCompile Include="Source\GameObject.cpp">
       <Filter>GameObject</Filter>
     </ClCompile>
@@ -109,6 +109,12 @@
     </ClCompile>
     <ClCompile Include="Source\Message.cpp">
       <Filter>Message &amp; State</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneTurn.cpp">
+      <Filter>TurnBase &amp; Hex Maze\Assignment2</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Player.cpp">
+      <Filter>TurnBase &amp; Hex Maze\Assignment2</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -178,9 +184,6 @@
     <ClInclude Include="Source\SceneHex.h">
       <Filter>TurnBase &amp; Hex Maze</Filter>
     </ClInclude>
-    <ClInclude Include="Source\SceneTurn.h">
-      <Filter>TurnBase &amp; Hex Maze</Filter>
-    </ClInclude>
     <ClInclude Include="Source\ObjectBase.h">
       <Filter>Message &amp; State\ObjectBase</Filter>
     </ClInclude>
@@ -198,6 +201,12 @@
     </ClInclude>
     <ClInclude Include="Source\Message.h">
       <Filter>Message &amp; State</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneTurn.h">
+      <Filter>TurnBase &amp; Hex Maze\Assignment2</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Player.h">
+      <Filter>TurnBase &amp; Hex Maze\Assignment2</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

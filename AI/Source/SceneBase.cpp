@@ -136,10 +136,14 @@ void SceneBase::Init()
 	meshList[GEO_GREYQUAD] = MeshBuilder::GenerateQuad("grey quad", Color(0.54f, 0.54f, 0.54f));
 	// +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+= //
 
+	// +=+=+=+=+=+=+=+=+=+=+= Assignment 2  +=+=+=+=+=+=+=+=+=+=+= //
 	meshList[GEO_PLAYER] = MeshBuilder::GenerateQuad("player", Color(1.f, 1.f, 1.f));
 	meshList[GEO_PLAYER]->textureID = LoadTGA("Image//player.tga");
 	meshList[GEO_ENEMY] = MeshBuilder::GenerateQuad("enemy", Color(1.f, 1.f, 1.f));
 	meshList[GEO_ENEMY]->textureID = LoadTGA("Image//enemy.tga");
+	meshList[GEO_DOOR] = MeshBuilder::GenerateQuad("door", Color(1.f, 1.f, 1.f));
+	meshList[GEO_DOOR]->textureID = LoadTGA("Image//door.tga");
+	// +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+= //
 
 	bLightEnabled = false;
 }

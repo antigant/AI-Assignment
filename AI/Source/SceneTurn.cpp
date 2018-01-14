@@ -37,7 +37,7 @@ void SceneTurn::Init()
 	std::fill(fogList.begin(), fogList.end(), Maze::FOG::UNSEEN);
 
 	// Player
-	player = FetchGO("Player");
+	GameObject *player = FetchGO("Player");
 	player->grid.resize(m_noGrid * m_noGrid);
 	player->visited.resize(m_noGrid * m_noGrid);
 	std::fill(player->grid.begin(), player->grid.end(), Maze::TILE_FOG);
@@ -52,8 +52,10 @@ void SceneTurn::Init()
 	//fogList[player->GetPosition().y * m_noGrid + (player->GetPosition().x + 1)] = Maze::FOG::SEEN;
 
 	m_start.Set(0, 0);
-	m_mazeKey = 0;
-	m_wallLoad = 0.3f;
+	//m_mazeKey = 0;
+	//m_wallLoad = 0.25f;
+	m_mazeKey = Math::RandIntMinMax(0, 100);
+	m_wallLoad = Math::RandFloatMinMax(0.25f, 0.35f);
 	m_maze.Generate(m_mazeKey, m_noGrid, m_start, m_wallLoad); //Generate new maze
 	m_myGrid.resize(m_noGrid * m_noGrid);
 	m_visited.resize(m_noGrid * m_noGrid);
@@ -61,7 +63,7 @@ void SceneTurn::Init()
 	std::fill(m_myGrid.begin(), m_myGrid.end(), Maze::TILE_FOG);
 	std::fill(m_visited.begin(), m_visited.end(), false);
 	m_myGrid[m_start.y * m_noGrid + m_start.x] = Maze::TILE_EMPTY;
-	DFS(m_start);
+	//DFS(m_start);
 
 	m_turn = 0;
 	timer = 0.0;
@@ -79,11 +81,23 @@ GameObject* SceneTurn::FetchGO(std::string type)
 			return go;
 		}
 	}
-	for (unsigned i = 0; i < 2; ++i)
+
+	if (type == "Player")
 	{
-		GameObject *go = new GameObject(type);
+		Player *go = new Player(type, true);
+		go->SetExitPt(MazePt(-100, -100)); // At the start, no such coordinate (for safety measures)
 		m_goList.push_back(go);
 	}
+	// other entities other than player
+	else
+	{
+		for (unsigned i = 0; i < 2; ++i)
+		{
+			GameObject *go = new GameObject(type);
+			m_goList.push_back(go);
+		}
+	}
+
 	return FetchGO(type);
 }
 
@@ -246,7 +260,7 @@ void SceneTurn::DFSOnce(GameObject *go)
 	if (next.y < m_noGrid && !go->visited[next.y * m_noGrid + next.x])
 	{
 		go->grid[next.y * m_noGrid + next.x] = m_maze.See(next);
-		if (go->grid[next.y * m_noGrid + next.x] == Maze::TILE_EMPTY)
+		if (go->grid[next.y * m_noGrid + next.x] == Maze::TILE_EMPTY || go->grid[next.y * m_noGrid + next.x] == Maze::TILE_DOOR)
 		{
 			go->curr = next;
 			return;
@@ -258,7 +272,7 @@ void SceneTurn::DFSOnce(GameObject *go)
 	if (next.y >= 0 && !go->visited[next.y * m_noGrid + next.x])
 	{
 		go->grid[next.y * m_noGrid + next.x] = m_maze.See(next);
-		if (go->grid[next.y * m_noGrid + next.x] == Maze::TILE_EMPTY)
+		if (go->grid[next.y * m_noGrid + next.x] == Maze::TILE_EMPTY || go->grid[next.y * m_noGrid + next.x] == Maze::TILE_DOOR)
 		{
 			go->curr = next;
 			return;
@@ -270,7 +284,7 @@ void SceneTurn::DFSOnce(GameObject *go)
 	if (next.x >= 0 && !go->visited[next.y * m_noGrid + next.x])
 	{
 		go->grid[next.y * m_noGrid + next.x] = m_maze.See(next);
-		if (go->grid[next.y * m_noGrid + next.x] == Maze::TILE_EMPTY)
+		if (go->grid[next.y * m_noGrid + next.x] == Maze::TILE_EMPTY || go->grid[next.y * m_noGrid + next.x] == Maze::TILE_DOOR)
 		{
 			go->curr = next;
 			return;
@@ -282,7 +296,7 @@ void SceneTurn::DFSOnce(GameObject *go)
 	if (next.x < m_noGrid && !go->visited[next.y * m_noGrid + next.x])
 	{
 		go->grid[next.y * m_noGrid + next.x] = m_maze.See(next);
-		if (go->grid[next.y * m_noGrid + next.x] == Maze::TILE_EMPTY)
+		if (go->grid[next.y * m_noGrid + next.x] == Maze::TILE_EMPTY || go->grid[next.y * m_noGrid + next.x] == Maze::TILE_DOOR)
 		{
 			go->curr = next;
 			return;
@@ -418,7 +432,7 @@ bool SceneTurn::BFSLimit(GameObject * go, MazePt end, int limit)
 					continue;
 
 				if (!visited[next.y * m_noGrid + next.x] &&
-					(go->grid[next.y * m_noGrid + next.x] == Maze::TILE_EMPTY))
+					(go->grid[next.y * m_noGrid + next.x] == Maze::TILE_EMPTY) || (go->grid[next.y * m_noGrid + next.x] == Maze::TILE_DOOR))
 				{
 					previous[next.y * m_noGrid + next.x] = curr;
 					queue.push(next);
@@ -508,7 +522,7 @@ void SceneTurn::FogAgain()
 void SceneTurn::Update(double dt)
 {
 	SceneBase::Update(dt);
-	FogAgain();
+	//FogAgain();
 	PlayerVisibility();
 
 	//Calculating aspect ratio
@@ -535,6 +549,54 @@ void SceneTurn::Update(double dt)
 	if (Application::IsKeyPressed('R'))
 	{
 		//Exercise: Implement Reset button
+	}
+
+	if (Application::IsKeyPressed('1') || Application::IsKeyPressed('2') || Application::IsKeyPressed('3'))
+	{
+		std::vector<GameObject*> tempList = m_goList;
+		m_turn = 0;
+		m_mazeKey = Math::RandIntMinMax(0, 100);
+		m_wallLoad = Math::RandFloatMinMax(0.25f, 0.35f);
+
+		if (Application::IsKeyPressed('1'))
+			m_noGrid = 11;
+		else if (Application::IsKeyPressed('2'))
+			m_noGrid = 12;
+		else if (Application::IsKeyPressed('3'))
+			m_noGrid = 14;
+
+		m_start.Set(0, 0);
+		m_gridSize = m_worldHeight / m_noGrid;
+		m_myGrid.resize(m_noGrid * m_noGrid);
+		m_visited.resize(m_noGrid * m_noGrid);
+		m_previous.resize(m_noGrid * m_noGrid);
+		std::fill(m_myGrid.begin(), m_myGrid.end(), Maze::TILE_FOG);
+		std::fill(m_visited.begin(), m_visited.end(), false);
+		m_myGrid[m_start.y * m_noGrid + m_start.x] = Maze::TILE_EMPTY;
+		// Fog
+		fogList.resize(m_noGrid * m_noGrid);
+		std::fill(fogList.begin(), fogList.end(), Maze::FOG::UNSEEN);
+
+
+
+		for (auto go : tempList)
+		{
+			if (!go->GetActive())
+				continue;
+			else if (go->GetType() != "Player")
+				continue;
+
+			// Player
+			go->grid.resize(m_noGrid * m_noGrid);
+			go->visited.resize(m_noGrid * m_noGrid);
+			std::fill(go->grid.begin(), go->grid.end(), Maze::TILE_FOG);
+			std::fill(go->visited.begin(), go->visited.end(), false);
+			go->stack.push_back(MazePt(go->GetPosition().x, go->GetPosition().y));
+			go->grid[go->curr.y * m_noGrid + go->curr.x] = Maze::TILE_EMPTY;
+			go->curr.Set(m_start.x, m_start.y);
+		}
+
+		m_maze.Generate(m_mazeKey, m_noGrid, m_start, m_wallLoad); //Generate new maze
 	}
 
 	//Input Section
@@ -613,7 +675,17 @@ void SceneTurn::Update(double dt)
 	}
 
 	timer += m_speed * dt;
-	if (timer > TURN_TIME)
+	//testTimer += m_speed * dt;
+	//if (testTimer >= 5)
+	//{
+	//	for (auto go : m_goList)
+	//	{
+	//		if (go->GetType() != "Player")
+	//			return;
+	//		go->stack.clear();
+	//	}
+	//}
+	if (timer > TURN_TIME/* && testTimer < 5*/)
 	{
 		++m_turn;
 		timer -= TURN_TIME;
@@ -632,19 +704,23 @@ void SceneTurn::Update(double dt)
 
 			if (!go->GetActive())
 				continue;
-			if(go->GetType() == "NPC" || go->GetType() == "Player")
+			if(go->GetType() == "Player")
 			{
-				if (!go->stack.empty())
-				{
-					// Maze reading state
-					DFSOnce(go);
-				}
-				else if (!go->path.empty())
-				{
-					// Path finding state
-					go->curr = go->path[0];
-					go->path.erase(go->path.begin());
-				}
+				Player *player = dynamic_cast<Player*>(go);
+				if ( (player->GetType() == "Player" && !player->GetIsAI()) || player->GetExitFound() )
+					return;
+			}
+
+			if (!go->stack.empty())
+			{
+				// Maze reading state
+				DFSOnce(go);
+			}
+			else if (!go->path.empty())
+			{
+				// Path finding state
+				go->curr = go->path[0];
+				go->path.erase(go->path.begin());
 			}
 		}
 	}
@@ -711,6 +787,9 @@ void SceneTurn::Render()
 					case Maze::TILE_EMPTY:
 						RenderMesh(meshList[GEO_WHITEQUAD], false);
 						break;
+					case Maze::TILE_DOOR:
+						RenderMesh(meshList[GEO_DOOR], false);
+						break;
 					}
 				}
 				else
@@ -766,9 +845,9 @@ void SceneTurn::Render()
 	ss << "Turn:" << m_turn;
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 50, 9);
 
-	ss.str("");
-	ss << "Turn Maze " << m_mazeKey;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 50, 0);
+	//ss.str("");
+	//ss << "Turn Maze " << m_mazeKey;
+	//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 50, 0);
 }
 
 void SceneTurn::Exit()

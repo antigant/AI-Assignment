@@ -60,8 +60,10 @@ public:
 		GEO_BLACKQUAD,
 		GEO_GREYQUAD,
 
+		// Assignment 2
 		GEO_PLAYER,
 		GEO_ENEMY,
+		GEO_DOOR,
 
 		NUM_GEOMETRY,
 	};

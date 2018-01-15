@@ -45,6 +45,15 @@ void SceneTurn::Init()
 	player->stack.push_back(MazePt(player->GetPosition().x, player->GetPosition().y));
 	player->grid[player->curr.y * m_noGrid + player->curr.x] = Maze::TILE_EMPTY;
 
+	// Test
+	GameObject *go = FetchGO("Test");
+	go->grid.resize(m_noGrid * m_noGrid);
+	go->visited.resize(m_noGrid * m_noGrid);
+	std::fill(go->grid.begin(), go->grid.end(), Maze::TILE_FOG);
+	std::fill(go->visited.begin(), go->visited.end(), false);
+	go->stack.push_back(MazePt(go->GetPosition().x, go->GetPosition().y));
+	go->grid[go->curr.y * m_noGrid + go->curr.x] = Maze::TILE_EMPTY;
+
 	//player->SetPosition(Vector3(5.f, 5.f, 0.f));
 	//fogList[player->GetPosition().y * m_noGrid + player->GetPosition().x] = Maze::FOG::SEEN;
 	//fogList[(player->GetPosition().y + 1) * m_noGrid + player->GetPosition().x] = Maze::FOG::SEEN;
@@ -64,6 +73,21 @@ void SceneTurn::Init()
 	std::fill(m_visited.begin(), m_visited.end(), false);
 	m_myGrid[m_start.y * m_noGrid + m_start.x] = Maze::TILE_EMPTY;
 	//DFS(m_start);
+	//for (int i = 0; i < 300; ++i)
+	//{
+	//	//DFSOnce(player);
+	//	if (!player->stack.empty())
+	//	{
+	//		// Maze reading state
+	//		DFSOnce(player);
+	//	}
+	//	else if (!player->path.empty())
+	//	{
+	//		// Path finding state
+	//		player->curr = player->path[0];
+	//		player->path.erase(player->path.begin());
+	//	}
+	//}
 
 	m_turn = 0;
 	timer = 0.0;
@@ -711,17 +735,17 @@ void SceneTurn::Update(double dt)
 					return;
 			}
 
-			if (!go->stack.empty())
-			{
-				// Maze reading state
-				DFSOnce(go);
-			}
-			else if (!go->path.empty())
-			{
-				// Path finding state
-				go->curr = go->path[0];
-				go->path.erase(go->path.begin());
-			}
+			//if (!go->stack.empty())
+			//{
+			//	// Maze reading state
+			//	DFSOnce(go);
+			//}
+			//else if (!go->path.empty())
+			//{
+			//	// Path finding state
+			//	go->curr = go->path[0];
+			//	go->path.erase(go->path.begin());
+			//}
 		}
 	}
 }

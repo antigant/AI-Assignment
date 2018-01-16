@@ -136,6 +136,11 @@ void SceneBase::Init()
 	meshList[GEO_GREYQUAD] = MeshBuilder::GenerateQuad("grey quad", Color(0.54f, 0.54f, 0.54f));
 	// +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+= //
 
+	// +=+=+=+=+=+=+=+=+=+=+=+=+= Lab   +=+=+=+=+=+=+=+=+=+=+=+=+= //
+	meshList[GEO_EDGE] = MeshBuilder::GenerateLine("white quad");
+	meshList[GEO_NODE] = MeshBuilder::GenerateSphere("circle", Color(1.f, 0.f, 0.f), 10, 10);
+	// +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+= //
+
 	// +=+=+=+=+=+=+=+=+=+=+= Assignment 2  +=+=+=+=+=+=+=+=+=+=+= //
 	meshList[GEO_PLAYER] = MeshBuilder::GenerateQuad("player", Color(1.f, 1.f, 1.f));
 	meshList[GEO_PLAYER]->textureID = LoadTGA("Image//player.tga");

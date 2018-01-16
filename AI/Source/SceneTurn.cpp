@@ -420,13 +420,25 @@ void SceneTurn::PlayerVisibility()
 			fogList[go->curr.y * m_noGrid + go->curr.x] = Maze::FOG::SEEN;
 
 			if (go->curr.x - 1 >= 0) // x position
+			{
+				go->grid[go->curr.y * m_noGrid + (go->curr.x - 1)] = m_maze.See(go->curr.y * m_noGrid + (go->curr.x - 1));
 				fogList[go->curr.y * m_noGrid + (go->curr.x - 1)] = Maze::FOG::SEEN;
+			}
 			if (go->curr.x + 1 < m_noGrid)
+			{
+				go->grid[go->curr.y * m_noGrid + (go->curr.x + 1)] = m_maze.See(go->curr.y * m_noGrid + (go->curr.x + 1));
 				fogList[go->curr.y * m_noGrid + (go->curr.x + 1)] = Maze::FOG::SEEN;
+			}
 			if (go->curr.y - 1 >= 0) // y position
+			{
+				go->grid[(go->curr.y - 1) * m_noGrid + go->curr.x] = m_maze.See((go->curr.y - 1) * m_noGrid + go->curr.x);
 				fogList[(go->curr.y - 1) * m_noGrid + go->curr.x] = Maze::FOG::SEEN;
+			}
 			if (go->curr.y + 1 < m_noGrid)
+			{
+				go->grid[(go->curr.y + 1) * m_noGrid + go->curr.x] = m_maze.See((go->curr.y + 1) * m_noGrid + go->curr.x);
 				fogList[(go->curr.y + 1) * m_noGrid + go->curr.x] = Maze::FOG::SEEN;
+			}
 		}
 	}
 }
@@ -497,7 +509,7 @@ void SceneTurn::Update(double dt)
 		m_wallLoad = Math::RandFloatMinMax(0.25f, 0.35f);
 
 		if (Application::IsKeyPressed('1'))
-			m_noGrid = 11;
+			m_noGrid = 10;
 		else if (Application::IsKeyPressed('2'))
 			m_noGrid = 12;
 

@@ -59,6 +59,9 @@ public:
 		GEO_WHITEQUAD,
 		GEO_BLACKQUAD,
 		GEO_GREYQUAD,
+		// Lab 9
+		GEO_EDGE,
+		GEO_NODE,
 
 		// Assignment 2
 		GEO_PLAYER,

@@ -20,7 +20,7 @@ public:
 	virtual void Exit();
 
 	void RenderGO(GameObject *go);
-	GameObject* FetchGO(GameObject::GAMEOBJECT_TYPE type);
+	GameObject* FetchGO(std::string type);
 
 	void RenderGraph();
 
@@ -31,6 +31,9 @@ protected:
 	float m_worldWidth;
 	float m_worldHeight;
 	int m_objectCount;
+
+	Graph m_graph;
+	unsigned m_graphKey;
 };
 
 #endif

@@ -24,16 +24,17 @@ void SceneGraph::Init()
 
 	Math::InitRNG();
 
+	m_graph.Generate(0, m_worldHeight);
 }
 
-GameObject* SceneGraph::FetchGO(GameObject::GAMEOBJECT_TYPE type)
+GameObject* SceneGraph::FetchGO(std::string type)
 {
 	for (std::vector<GameObject *>::iterator it = m_goList.begin(); it != m_goList.end(); ++it)
 	{
 		GameObject *go = (GameObject *)*it;
-		if (!go->active && go->type == type)
+		if (!go->GetActive() && go->GetType() == type)
 		{
-			go->active = true;
+			go->SetActive(true);
 			++m_objectCount;
 			return go;
 		}
@@ -121,15 +122,26 @@ void SceneGraph::Update(double dt)
 
 void SceneGraph::RenderGO(GameObject *go)
 {
-	switch (go->type)
-	{
-	case GameObject::GO_NPC:
-		break;
-	}
+
 }
 
 void SceneGraph::RenderGraph()
 {
+	for (int i = 0; i < m_graph.m_nodes.size(); ++i)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(m_graph.m_nodes[i]->pos.x, m_graph.m_nodes[i]->pos.y, m_graph.m_nodes[i]->pos.z);
+		RenderMesh(meshList[GEO_NODE], false);
+		modelStack.PopMatrix();
+	}
+
+	for (int i = 0; i < m_graph.m_edges.size(); ++i)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(m_graph.m_edges[i]->cost, m_graph.m_edges[i]->cost, m_graph.m_edges[i]->cost);
+		RenderMesh(meshList[GEO_NODE], false);
+		modelStack.PopMatrix();
+	}
 }
 
 void SceneGraph::Render()
@@ -140,6 +152,8 @@ void SceneGraph::Render()
 	Mtx44 projection;
 	projection.SetToOrtho(0, m_worldWidth, 0, m_worldHeight, -10, 10);
 	projectionStack.LoadMatrix(projection);
+
+	RenderGraph();
 
 	// Camera matrix
 	viewStack.LoadIdentity();

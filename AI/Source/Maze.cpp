@@ -43,7 +43,12 @@ void Maze::Generate(unsigned key, unsigned size, MazePt start, float wallLoad)
 				++NumberOfDoors;
 			}
 			else
+			{
+				if (chosen == 1 || chosen == 12)
+					continue;
+
 				m_grid[chosen] = TILE_WALL;
+			}
 			--i;
 		}
 	}

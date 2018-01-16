@@ -62,6 +62,10 @@ public:
 	State *GetCurrentState(void);
 	State *GetNextState(void);
 
+	// Assignment2
+	void SetMyTurn(const bool myTurn);
+	bool GetMyTurn() const;
+
 //private:
 	// For lab 8 practical
 	std::vector<Maze::TILE_CONTENT> grid;
@@ -88,6 +92,9 @@ protected:
 	bool moveRight, fixMoveRight;
 	bool moveUp, fixMoveUp;
 	bool moveDown, fixMoveDown;
+
+	// Assignment 2
+	bool myTurn;
 };
 
 #endif

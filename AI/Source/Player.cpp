@@ -6,7 +6,7 @@ Player::Player(std::string typeValue, bool isAI)
 	, exitFound(false)
 	, exitPt(MazePt(0.f, 0.f))
 {
-
+	myTurn = true;
 }
 
 Player::~Player()

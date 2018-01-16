@@ -1,0 +1,1 @@
+// Player state where he will try to find the exit and run away

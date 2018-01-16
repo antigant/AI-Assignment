@@ -12,6 +12,8 @@ GameObject::GameObject(std::string typeValue)
 	, moveRight(false)
 	, moveUp(false)
 	, moveDown(false)
+	// Assignment2
+	, myTurn(false)
 {
 
 }
@@ -216,4 +218,15 @@ State *GameObject::GetCurrentState(void)
 State *GameObject::GetNextState(void)
 {
 	return m_nextState;
+}
+
+// Assignment 2
+void GameObject::SetMyTurn(const bool myTurn)
+{
+	this->myTurn = myTurn;
+}
+
+bool GameObject::GetMyTurn() const
+{
+	return myTurn;
 }

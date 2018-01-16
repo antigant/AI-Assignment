@@ -42,6 +42,15 @@
     <Filter Include="TurnBase &amp; Hex Maze\Assignment2">
       <UniqueIdentifier>{8cad94c2-fdb6-4ad0-a192-64b38c993628}</UniqueIdentifier>
     </Filter>
+    <Filter Include="TurnBase &amp; Hex Maze\Assignment2\States">
+      <UniqueIdentifier>{efc4f275-80bf-431b-a681-e7263d7b09f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TurnBase &amp; Hex Maze\Assignment2\States\Player">
+      <UniqueIdentifier>{36c254f5-9e58-44b2-ba48-5656bffdcdd4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TurnBase &amp; Hex Maze\Assignment2\States\Enemy">
+      <UniqueIdentifier>{bf2cde75-39c0-4571-b50c-95c8d8bc88ff}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -207,6 +216,9 @@
     </ClInclude>
     <ClInclude Include="Source\Player.h">
       <Filter>TurnBase &amp; Hex Maze\Assignment2</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Finding.h">
+      <Filter>TurnBase &amp; Hex Maze\Assignment2\States\Player</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

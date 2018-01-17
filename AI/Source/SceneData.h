@@ -3,6 +3,9 @@
 
 #include "SingletonTemplate.h"
 
+// Assignment 2
+#include "Maze.h"
+
 class SceneData : public Singleton<SceneData>
 {
 	friend Singleton<SceneData>;
@@ -28,6 +31,8 @@ public:
 	void MinusObjectCount(const int amount);
 	void AddSpeed(const float m_speed);
 	void MinusSpeed(const float m_speed);
+
+	Maze m_maze;
 
 private:
 	SceneData();

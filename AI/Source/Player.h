@@ -14,6 +14,8 @@ public:
 	Player(std::string typeValue, bool isAI = true);
 	~Player();
 
+	virtual bool Handle(Message *message);
+
 	void SetIsAI(const bool isAI);
 	void SetExitFound(const bool exitFound);
 	void SetExitPt(const MazePt exitPt);

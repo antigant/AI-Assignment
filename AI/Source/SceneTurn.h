@@ -24,7 +24,7 @@ public:
 
 	void DFS(MazePt curr);
 	bool BFS(MazePt start, MazePt end);
-	void DFSOnce(GameObject *go);
+	//void DFSOnce(GameObject *go);
 	bool BFSLimit(GameObject *go, MazePt end, int limit);
 	int m_turn;
 	double timer, testTimer;
@@ -44,7 +44,7 @@ protected:
 	float m_gridSize;
 	float m_gridOffset;
 
-	Maze m_maze;
+	//Maze m_maze;
 	MazePt m_start;
 	MazePt m_end;
 	std::vector<Maze::TILE_CONTENT> m_myGrid; //read maze and store here

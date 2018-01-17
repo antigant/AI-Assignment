@@ -125,14 +125,17 @@
     <ClCompile Include="Source\SceneTurn.cpp">
       <Filter>TurnBase &amp; Hex Maze\Assignment2</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Player.cpp">
-      <Filter>TurnBase &amp; Hex Maze\Assignment2</Filter>
-    </ClCompile>
     <ClCompile Include="Source\SceneGraph.cpp">
       <Filter>SceneGraph</Filter>
     </ClCompile>
     <ClCompile Include="Source\Graph.cpp">
       <Filter>SceneGraph</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Finding.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Player.cpp">
+      <Filter>TurnBase &amp; Hex Maze\Assignment2\States\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -211,9 +214,6 @@
     <ClInclude Include="Source\Maze.h">
       <Filter>Maze</Filter>
     </ClInclude>
-    <ClInclude Include="Source\State.h">
-      <Filter>Message &amp; State\State</Filter>
-    </ClInclude>
     <ClInclude Include="Source\StateMachineManager.h">
       <Filter>Message &amp; State\State\Manager</Filter>
     </ClInclude>
@@ -221,9 +221,6 @@
       <Filter>Message &amp; State</Filter>
     </ClInclude>
     <ClInclude Include="Source\SceneTurn.h">
-      <Filter>TurnBase &amp; Hex Maze\Assignment2</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Player.h">
       <Filter>TurnBase &amp; Hex Maze\Assignment2</Filter>
     </ClInclude>
     <ClInclude Include="Source\Finding.h">
@@ -234,6 +231,12 @@
     </ClInclude>
     <ClInclude Include="Source\Graph.h">
       <Filter>SceneGraph</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\State.h">
+      <Filter>Message &amp; State\State\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Player.h">
+      <Filter>TurnBase &amp; Hex Maze\Assignment2\States\Player</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

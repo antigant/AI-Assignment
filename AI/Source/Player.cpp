@@ -14,6 +14,14 @@ Player::~Player()
 
 }
 
+bool Player::Handle(Message *message)
+{
+	if(message->GetMessageFrom() == "Enemy")
+
+	delete message;
+	return false;
+}
+
 void Player::SetIsAI(const bool isAI)
 {
 	this->isAI = isAI;

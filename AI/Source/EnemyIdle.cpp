@@ -6,41 +6,40 @@
 
 #include "Enemy.h"
 
-IdleEnemy::IdleEnemy(const std::string &stateID)
+EnemyIdle::EnemyIdle(const std::string &stateID)
 	: State(stateID)
 {
 
 }
 
-IdleEnemy::~IdleEnemy()
+EnemyIdle::~EnemyIdle()
 {
 
 }
 
-void IdleEnemy::Enter(GameObject *go)
+void EnemyIdle::Enter(GameObject *go)
 {
 	idleFor = Math::RandIntMinMax(0, 5);
 }
 
-void IdleEnemy::Update(double dt, GameObject *go)
+void EnemyIdle::Update(double dt, GameObject *go)
 {
-	Enemy *enemy = dynamic_cast<Enemy*>(go);
-
 	if (!go->GetMyTurn())
 		return;
 
-	go->SetMyTurn(false);
-	if (enemy->GetNumberOfTurns() != idleFor)
+	Enemy *enemy = dynamic_cast<Enemy*>(go);
+	if (enemy->GetNumberOfTurns() >= idleFor)
 	{
-		enemy->AddNumberOfTurns(1);
-		PostOffice::GetInstance()->Send("Player", new Message("Enemy", "Your turn"));
-		return;
+		StateMachineManager::GetInstance()->SetNextState(enemy, "Wonder");
+		enemy->SetNumberOfTurns(0);
 	}
 
-	StateMachineManager::GetInstance()->SetNextState(enemy, "Wonder");
+	enemy->AddNumberOfTurns(1);
+	go->SetMyTurn(false);
+	PostOffice::GetInstance()->Send("Player", new Message("Enemy", "Your turn"));
 }
 
-void IdleEnemy::Exit(GameObject *go)
+void EnemyIdle::Exit(GameObject *go)
 {
 
 }

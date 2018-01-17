@@ -19,6 +19,9 @@ public:
 	// Getter
 	int GetNumberOfTurns() const;
 
+	// See the entire maze
+	void SeeEntireMaze();
+
 	void AddNumberOfTurns(const int value);
 };
 

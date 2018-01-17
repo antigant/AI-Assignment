@@ -7,16 +7,18 @@
 #include "Maze.h"
 #include <queue>
 
-class SceneTurn : public SceneBase
+class SceneTurn : public SceneBase, public ObjectBase
 {
 public:
 	SceneTurn();
 	~SceneTurn();
 
+
 	virtual void Init();
 	virtual void Update(double dt);
 	virtual void Render();
 	virtual void Exit();
+	virtual bool Handle(Message *message);
 
 	void RenderGO(GameObject *go);
 	GameObject* FetchGO(std::string type);

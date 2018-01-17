@@ -143,6 +143,12 @@
     <ClCompile Include="Source\EscapeMaze.cpp">
       <Filter>TurnBase &amp; Hex Maze\Assignment2\States\Player</Filter>
     </ClCompile>
+    <ClCompile Include="Source\EnemyIdle.cpp">
+      <Filter>TurnBase &amp; Hex Maze\Assignment2\States\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\EnemyWonder.cpp">
+      <Filter>TurnBase &amp; Hex Maze\Assignment2\States\Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -249,6 +255,12 @@
     </ClInclude>
     <ClInclude Include="Source\EscapeMaze.h">
       <Filter>TurnBase &amp; Hex Maze\Assignment2\States\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\EnemyIdle.h">
+      <Filter>TurnBase &amp; Hex Maze\Assignment2\States\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\EnemyWonder.h">
+      <Filter>TurnBase &amp; Hex Maze\Assignment2\States\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

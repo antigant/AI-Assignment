@@ -7,12 +7,16 @@
 #include "Player.h"
 #include "Enemy.h"
 
+// PostOffice
+#include "PostOffice.h"
 // States
 #include "StateMachineManager.h"
 #include "Finding.h"
 #include "EscapeMaze.h"
+#include "EnemyIdle.h"
+#include "EnemyWonder.h"
 
-#define TURN_TIME 0.5
+#define TURN_TIME 1.5
 
 SceneTurn::SceneTurn()
 {
@@ -60,13 +64,19 @@ void SceneTurn::Init()
 	m_myGrid[m_start.y * m_noGrid + m_start.x] = Maze::TILE_EMPTY;
 	//DFS(m_start);
 
+	PostOffice::GetInstance()->Register("Scene", this);
+
 	// Player
-	GameObject *go = FetchGO("Player");
 	StateMachineManager::GetInstance()->AddState("Player", new Finding("Finding"));
 	StateMachineManager::GetInstance()->AddState("Player", new EscapeMaze("Escape"));
+	GameObject *go = FetchGO("Player");
+	PostOffice::GetInstance()->Register("Player", go);
 
 	// Enemy
+	StateMachineManager::GetInstance()->AddState("Enemy", new EnemyIdle("Idle"));
+	StateMachineManager::GetInstance()->AddState("Enemy", new EnemyWonder("Wonder"));
 	go = FetchGO("Enemy");
+	PostOffice::GetInstance()->Register("Enemy", go);
 
 	m_turn = 0;
 	timer = 0.0;
@@ -125,6 +135,7 @@ GameObject* SceneTurn::FetchGO(std::string type)
 		}
 		go->stack.push_back(go->curr);
 		go->grid[go->curr.y * m_noGrid + go->curr.x] = Maze::TILE_EMPTY;
+		go->SeeEntireMaze();
 		m_goList.push_back(go);
 	}
 	// other entities other than player
@@ -644,6 +655,19 @@ void SceneTurn::Update(double dt)
 		timer -= TURN_TIME;
 		StateMachineManager::GetInstance()->Update(dt);
 
+		for (auto go : m_goList)
+		{
+			if (!go->GetActive())
+				continue;
+
+			if (!go->path.empty())
+			{
+				// Path finding state
+				go->curr = go->path[0];
+				go->path.erase(go->path.begin());
+			}
+		}
+
 		//for (auto go : m_goList)
 		//{
 		//	//if (go->GetActive())
@@ -681,6 +705,11 @@ void SceneTurn::Update(double dt)
 	}
 }
 
+bool SceneTurn::Handle(Message *message)
+{
+	delete message;
+	return false;
+}
 
 void SceneTurn::RenderGO(GameObject *go)
 {
@@ -689,7 +718,7 @@ void SceneTurn::RenderGO(GameObject *go)
 	modelStack.Scale(m_gridSize, m_gridSize, m_gridSize);
 	if (go->GetType() == "Enemy")
 	{
-		if(fogList[go->curr.y * m_noGrid + go->curr.x] == Maze::FOG::SEEN)
+		//if(fogList[go->curr.y * m_noGrid + go->curr.x] == Maze::FOG::SEEN)
 			RenderMesh(meshList[GEO_ENEMY], false);
 	}
 	else if (go->GetType() == "Player")

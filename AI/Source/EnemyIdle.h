@@ -4,13 +4,13 @@
 #include "State.h"
 #include "GameObject.h"
 
-class IdleEnemy : public State
+class EnemyIdle : public State
 {
 private:
 	int idleFor;
 public:
-	IdleEnemy(const std::string &stateID);
-	~IdleEnemy();
+	EnemyIdle(const std::string &stateID);
+	~EnemyIdle();
 
 	virtual void Enter(GameObject *go);
 	virtual void Update(double dt, GameObject *go);

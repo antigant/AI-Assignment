@@ -1,4 +1,5 @@
 #include "Enemy.h"
+#include "SceneData.h"
 
 Enemy::Enemy(std::string typeValue)
 	: GameObject(typeValue)
@@ -38,6 +39,12 @@ void Enemy::SetNumberOfTurns(const int numberOfTurns)
 int Enemy::GetNumberOfTurns() const
 {
 	return numberOfTurns;
+}
+
+void Enemy::SeeEntireMaze()
+{
+	for (int i = 0; i < SceneData::GetInstance()->GetNoGrid() * SceneData::GetInstance()->GetNoGrid(); ++i)
+		grid[i] = SceneData::GetInstance()->m_maze.See(i);
 }
 
 void Enemy::AddNumberOfTurns(const int value)

@@ -158,6 +158,8 @@
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\Enemy.cpp" />
+    <ClCompile Include="Source\EnemyIdle.cpp" />
+    <ClCompile Include="Source\EnemyWonder.cpp" />
     <ClCompile Include="Source\EscapeMaze.cpp" />
     <ClCompile Include="Source\Finding.cpp" />
     <ClCompile Include="Source\GameObject.cpp" />
@@ -190,6 +192,8 @@
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\ConcreteMessages.h" />
     <ClInclude Include="Source\Enemy.h" />
+    <ClInclude Include="Source\EnemyIdle.h" />
+    <ClInclude Include="Source\EnemyWonder.h" />
     <ClInclude Include="Source\EscapeMaze.h" />
     <ClInclude Include="Source\Finding.h" />
     <ClInclude Include="Source\GameObject.h" />

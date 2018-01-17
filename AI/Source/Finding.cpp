@@ -38,9 +38,11 @@ void Finding::Update(double dt, GameObject *go)
 	{
 		// Maze reading state
 		DFSOnce(go);
-		PostOffice::GetInstance()->Send("Enemy", new Message("Player", "Your turn"));
-		go->SetMyTurn(false);
 	}
+
+	PostOffice::GetInstance()->Send("Enemy", new Message("Player", "Your turn"));
+	go->SetMyTurn(false);
+
 	// Do another check to switch state
 	if (player->GetExitFound())
 		StateMachineManager::GetInstance()->SetNextState(player, "Escape");

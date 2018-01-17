@@ -1,52 +1,103 @@
-#include "EscapeMaze.h"
+#include "EnemyWonder.h"
 #include "StateMachineManager.h"
 #include "SceneData.h"
 #include "PostOffice.h"
 #include "Message.h"
 
-#include "Player.h"
+#include "Enemy.h"
 
-EscapeMaze::EscapeMaze(const std::string &stateID)
+EnemyWonder::EnemyWonder(const std::string &stateID)
 	: State(stateID)
 {
 
 }
 
-EscapeMaze::~EscapeMaze()
+EnemyWonder::~EnemyWonder()
 {
 
 }
 
-void EscapeMaze::Enter(GameObject *go)
+void EnemyWonder::Enter(GameObject *go)
 {
+	// In this state for how many turns
+	wonderFor = Math::RandIntMinMax(1, 4);
+	// Decide to either go back to idle state of go back to rampage state
+	changeState = Math::RandIntMinMax(0, 2);
 
+	MazePt next;
+	// Go left
+	if (factor == 0)
+	{
+		if (go->curr.x > 0)
+			next.Set(go->curr.x - steps, go->curr.y);
+		else
+			next.Set(go->curr.x + steps, go->curr.y);
+	}
+	// Go right
+	else if (factor == 1)
+	{
+		if (go->curr.x < SceneData::GetInstance()->GetNoGrid())
+			next.Set(go->curr.x + steps, go->curr.y);
+		else
+			next.Set(go->curr.x - steps, go->curr.y);
+	}
+	// Go up
+	else if (factor == 2)
+	{
+		if (go->curr.y < SceneData::GetInstance()->GetNoGrid())
+			next.Set(go->curr.x, go->curr.y + steps);
+		else
+			next.Set(go->curr.x, go->curr.y - steps);
+	}
+	else if (factor == 3)
+	{
+		if (go->curr.y > 0)
+			next.Set(go->curr.x, go->curr.y - steps);
+		else
+			next.Set(go->curr.x, go->curr.y + steps);
+	}
+
+	BFSLimit(go, next, 5);
 }
 
-void EscapeMaze::Update(double dt, GameObject *go)
+void EnemyWonder::Update(double dt, GameObject *go)
 {
 	if (!go->GetMyTurn())
 		return;
+	Enemy *enemy = dynamic_cast<Enemy*>(go);
+	// To decide the direction it will go
+	factor = Math::RandIntMinMax(0, 4);
+	// Number of steps to walk for
+	steps = Math::RandIntMinMax(2, 4);
 
-	Player *player = dynamic_cast<Player*>(go);
-	BFSLimit(go, player->GetExitPt(), 60);
-
-	//if (!go->path.empty())
+	//while (!go->path.empty())
 	//{
 	//	// Path finding state
 	//	go->curr = go->path[0];
 	//	go->path.erase(go->path.begin());
 	//}
 
-	PostOffice::GetInstance()->Send("Enemy", new Message("Player", "Your turn"));
+	enemy->AddNumberOfTurns(1);
 	go->SetMyTurn(false);
+	PostOffice::GetInstance()->Send("Player", new Message("Enemy", "Your turn"));
+
+	if (enemy->GetNumberOfTurns() >= wonderFor)
+	{
+		//if(changeState == 0)
+		StateMachineManager::GetInstance()->SetNextState(enemy, "Idle");
+		//else if(changeState == 1)
+		//	StateMachineManager::GetInstance()->SetNextState(enemy, "Rampage");
+
+		enemy->SetNumberOfTurns(0);
+	}
 }
 
-void EscapeMaze::Exit(GameObject *go)
+void EnemyWonder::Exit(GameObject *go)
 {
 
 }
 
-bool EscapeMaze::BFSLimit(GameObject *go, MazePt end, int limit)
+bool EnemyWonder::BFSLimit(GameObject *go, MazePt end, int limit)
 {
 	std::vector<bool> visited(SceneData::GetInstance()->GetNoGrid() * SceneData::GetInstance()->GetNoGrid(), false);
 	std::queue<MazePt> queue;

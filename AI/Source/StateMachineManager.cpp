@@ -42,6 +42,7 @@ void StateMachineManager::DefaultState(GameObject *go)
 	{
 		go->SetCurrentState(it->second);
 		go->SetNextState(it->second);
+		go->GetCurrentState()->Enter(go);
 		break;
 	}
 }

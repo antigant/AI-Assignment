@@ -1,6 +1,8 @@
 #include "Finding.h"
 #include "StateMachineManager.h"
 #include "SceneData.h"
+#include "PostOffice.h"
+#include "Message.h"
 
 #include "Player.h"
 
@@ -22,9 +24,13 @@ void Finding::Enter(GameObject *go)
 
 void Finding::Update(double dt, GameObject *go)
 {
-	Player *player = dynamic_cast<Player*>(go);
 	// Turn base
 	if (!go->GetMyTurn())
+		return;
+
+	Player *player = dynamic_cast<Player*>(go);
+
+	if (!player->GetIsAI())
 		return;
 
 	// For DFS
@@ -32,6 +38,7 @@ void Finding::Update(double dt, GameObject *go)
 	{
 		// Maze reading state
 		DFSOnce(go);
+		PostOffice::GetInstance()->Send("Enemy", new Message("Player", "Your turn"));
 		go->SetMyTurn(false);
 	}
 	// Do another check to switch state

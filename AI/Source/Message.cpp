@@ -1,7 +1,8 @@
 #include "Message.h"
 
-Message::Message(std::string messageFrom, std::string messageID)
+Message::Message(std::string messageFrom, std::string messageType, std::string messageID)
 	: messageFrom(messageFrom)
+	, messageType(messageType)
 	, messageID(messageID)
 {
 
@@ -18,15 +19,20 @@ std::string Message::GetMessageFrom(void) const
 	return messageFrom;
 }
 
-std::string Message::GetMessageID(void) const
+std::string Message::GetMessageType(void) const
 {
-	return messageID;
+	return messageType;
 }
 
 // Setter
 void Message::SetMessageFrom(const std::string messageFrom)
 {
 	this->messageFrom = messageFrom;
+}
+
+void Message::SetMessageType(const std::string messageType)
+{
+	this->messageType = messageType;
 }
 
 void Message::SetMessageID(const std::string messageID)

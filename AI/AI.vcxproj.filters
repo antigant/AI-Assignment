@@ -131,10 +131,16 @@
     <ClCompile Include="Source\Graph.cpp">
       <Filter>SceneGraph</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Finding.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Player.cpp">
+      <Filter>TurnBase &amp; Hex Maze\Assignment2\States\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Finding.cpp">
+      <Filter>TurnBase &amp; Hex Maze\Assignment2\States\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Enemy.cpp">
+      <Filter>TurnBase &amp; Hex Maze\Assignment2\States\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\EscapeMaze.cpp">
       <Filter>TurnBase &amp; Hex Maze\Assignment2\States\Player</Filter>
     </ClCompile>
   </ItemGroup>
@@ -236,6 +242,12 @@
       <Filter>Message &amp; State\State\Manager</Filter>
     </ClInclude>
     <ClInclude Include="Source\Player.h">
+      <Filter>TurnBase &amp; Hex Maze\Assignment2\States\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Enemy.h">
+      <Filter>TurnBase &amp; Hex Maze\Assignment2\States\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\EscapeMaze.h">
       <Filter>TurnBase &amp; Hex Maze\Assignment2\States\Player</Filter>
     </ClInclude>
   </ItemGroup>

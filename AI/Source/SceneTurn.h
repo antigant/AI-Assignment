@@ -2,7 +2,6 @@
 #define SCENE_TURN_H
 
 #include "GameObject.h"
-#include "player.h"
 #include <vector>
 #include "SceneBase.h"
 #include "Maze.h"
@@ -24,7 +23,7 @@ public:
 
 	void DFS(MazePt curr);
 	bool BFS(MazePt start, MazePt end);
-	//void DFSOnce(GameObject *go);
+	void DFSOnce(GameObject *go);
 	bool BFSLimit(GameObject *go, MazePt end, int limit);
 	int m_turn;
 	double timer, testTimer;

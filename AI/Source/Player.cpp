@@ -16,7 +16,15 @@ Player::~Player()
 
 bool Player::Handle(Message *message)
 {
-	if(message->GetMessageFrom() == "Enemy")
+	if (message->GetMessageFrom() == "Enemy")
+	{
+		if (message->GetMessageType() == "Your turn")
+		{
+			SetMyTurn(true);
+			delete message;
+			return true;
+		}
+	}
 
 	delete message;
 	return false;

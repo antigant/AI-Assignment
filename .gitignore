@@ -107,3 +107,6 @@ Debug/AI.ilk
 Debug/AI.exe
 AI/Debug/Player.obj
 AI/Debug/
+AI/Release/
+Common/Release/
+Release/

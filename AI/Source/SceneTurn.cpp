@@ -724,11 +724,11 @@ void SceneTurn::Update(double dt)
 	SceneData::GetInstance()->SetSpeed(m_speed);
 	if (timer > TURN_TIME)
 	{
-		++m_turn;
 		timer -= TURN_TIME;
 		if (gameEnded)
 			return;
 
+		++m_turn;
 		StateMachineManager::GetInstance()->Update(dt);
 		GameLogic();
 		gameJustStarted = false;

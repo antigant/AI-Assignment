@@ -40,8 +40,8 @@ void Finding::Update(double dt, GameObject *go)
 		DFSOnce(go);
 	}
 
-	PostOffice::GetInstance()->Send("Enemy", new Message("Player", "Your turn"));
 	go->SetMyTurn(false);
+	PostOffice::GetInstance()->Send("Enemy", new Message("Player", "Your turn"));
 
 	// Do another check to switch state
 	if (player->GetExitFound())

@@ -30,15 +30,15 @@ void EscapeMaze::Update(double dt, GameObject *go)
 	Player *player = dynamic_cast<Player*>(go);
 	BFSLimit(go, player->GetExitPt(), 60);
 
-	//if (!go->path.empty())
-	//{
-	//	// Path finding state
-	//	go->curr = go->path[0];
-	//	go->path.erase(go->path.begin());
-	//}
+	if (!go->path.empty())
+	{
+		// Path finding state
+		go->curr = go->path[0];
+		go->path.erase(go->path.begin());
+	}
 
-	PostOffice::GetInstance()->Send("Enemy", new Message("Player", "Your turn"));
 	go->SetMyTurn(false);
+	PostOffice::GetInstance()->Send("Enemy", new Message("Player", "Your turn"));
 }
 
 void EscapeMaze::Exit(GameObject *go)

@@ -30,6 +30,11 @@ float SceneData::GetSpeed(void) const
 	return m_speed;
 }
 
+int SceneData::GetTurn(void) const
+{
+	return m_turn;
+}
+
 // Setter
 void SceneData::SetObjectCount(const int m_objectCount)
 {
@@ -56,6 +61,11 @@ void SceneData::SetSpeed(const float m_speed)
 	this->m_speed = m_speed;
 }
 
+void SceneData::SetTurn(const int m_turn)
+{
+	this->m_turn = m_turn;
+}
+
 // Sorta Math thing
 void SceneData::AddObjectCount(const int amount)
 {
@@ -77,12 +87,18 @@ void SceneData::MinusSpeed(const float m_speed)
 	this->m_speed -= m_speed;
 }
 
+void SceneData::AddTurns(const int value)
+{
+	m_turn += value;
+}
+
 SceneData::SceneData()
 	: m_objectCount(0)
 	, m_noGrid(0)
 	, m_gridSize(0.f)
 	, m_gridOffset(0.f)
 	, m_speed(1.f)
+	, m_turn(0)
 {
 }
 

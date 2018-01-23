@@ -74,6 +74,11 @@ public:
 	std::vector<MazePt> path;
 	MazePt curr;
 
+	// For graph traversal
+	unsigned currNodeID;
+	std::vector<unsigned> gStack;
+	std::vector<Vector3> gPath;
+
 protected:
 	//StateMachine *sm; // Not gonna need this here if gonna be doing share state machine
 	Vector3 pos;

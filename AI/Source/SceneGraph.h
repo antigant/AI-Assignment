@@ -24,6 +24,11 @@ public:
 
 	void RenderGraph();
 
+private:
+	void GoRandomAdjacent(GameObject *go);
+	void DFSOnce(GameObject *go);
+	bool AStar(GameObject *go, unsigned start, unsigned end);
+
 protected:
 
 	std::vector<GameObject *> m_goList;

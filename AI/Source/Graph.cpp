@@ -14,6 +14,25 @@ Graph::~Graph()
 	}
 }
 
+unsigned Graph::NearestNode(const Vector3 &pos)
+{
+	unsigned nearest = 0;
+	if (m_nodes.size() != 0)
+	{
+		float distance = (m_nodes[0]->pos - pos).Length();
+		for (int i = 1; i < m_nodes.size(); ++i)
+		{
+			float temp = (m_nodes[i]->pos - pos).Length();
+			if (temp < distance)
+			{
+				distance = temp;
+				nearest = i;
+			}
+		}
+	}
+	return nearest;
+}
+
 void Graph::AddEdge(unsigned from, unsigned to)
 {
 	Edge *newEdge = new Edge;

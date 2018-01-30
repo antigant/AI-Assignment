@@ -6,6 +6,7 @@
 #include "SceneBase.h"
 #include "Maze.h"
 #include <queue>
+#include <sstream>
 
 class SceneTurn : public SceneBase, public ObjectBase
 {
@@ -33,6 +34,13 @@ public:
 private:
 	void PlayerVisibility();
 	void FogAgain();
+	void GameLogic();
+	void Restart(int m_noGrid);
+	
+	bool gameEnded;
+	bool gameJustStarted;
+	bool SeeEnemy;
+	std::ostringstream ss2;
 
 protected:
 

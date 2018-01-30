@@ -6,7 +6,6 @@
 
 class EnemyIdle : public State
 {
-private:
 	int idleFor;
 public:
 	EnemyIdle(const std::string &stateID);

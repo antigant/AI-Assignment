@@ -14,6 +14,25 @@ Graph::~Graph()
 	}
 }
 
+unsigned Graph::NearestNode(const Vector3 &pos)
+{
+	unsigned nearest = 0;
+	if (m_nodes.size() != 0)
+	{
+		float distance = (m_nodes[0]->pos - pos).Length();
+		for (int i = 1; i < m_nodes.size(); ++i)
+		{
+			float temp = (m_nodes[i]->pos - pos).Length();
+			if (temp < distance)
+			{
+				distance = temp;
+				nearest = i;
+			}
+		}
+	}
+	return nearest;
+}
+
 void Graph::AddEdge(unsigned from, unsigned to)
 {
 	Edge *newEdge = new Edge;
@@ -41,16 +60,35 @@ void Graph::AddNode(Vector3 pos)
 
 void Graph::Generate(unsigned key, unsigned size)
 {
-	AddNode(Vector3(10, 10));
-	AddNode(Vector3(80, 10));
-	AddNode(Vector3(10, 80));
-	AddNode(Vector3(80, 80));
-	AddEdge(0, 1);
-	AddEdge(1, 0);
-	AddEdge(0, 2);
-	AddEdge(2, 0);
-	AddEdge(1, 3);
-	AddEdge(3, 1);
-	AddEdge(2, 3);
-	AddEdge(3, 2);
+	//AddNode(Vector3(10, 10));
+	//AddNode(Vector3(80, 10));
+	//AddNode(Vector3(10, 80));
+	//AddNode(Vector3(80, 80));
+	//AddEdge(0, 1);
+	//AddEdge(1, 0);
+	//AddEdge(0, 2);
+	//AddEdge(2, 0);
+	//AddEdge(1, 3);
+	//AddEdge(3, 1);
+	//AddEdge(2, 3);
+	//AddEdge(3, 2);
+
+	// Radiant
+	// Radiant ancient
+	AddNode(Vector3(5.f, 5.f));
+	// top lane
+	AddNode(Vector3(5.f, 40.f));
+	AddNode(Vector3(5.f, 75.f));
+	// btm lane
+	AddNode(Vector3(40.f, 5.f));
+	AddNode(Vector3(75.f, 5.f));
+	// Dire
+	// top lane
+	AddNode(Vector3(25.f, 95.f));
+	AddNode(Vector3(60.f, 95.f));
+	// btm lane
+	AddNode(Vector3(95.f, 60.f));
+	AddNode(Vector3(95.f, 25.f));
+	// Dire ancient
+	AddNode(Vector3(95.f, 95.f));
 }

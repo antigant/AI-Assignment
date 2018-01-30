@@ -24,6 +24,24 @@ public:
 
 	void RenderGraph();
 
+private:
+	void GoRandomAdjacent(GameObject *go);
+	void DFSOnce(GameObject *go);
+	bool AStar(GameObject *go, unsigned start, unsigned end);
+
+	enum FACTIONS
+	{
+		FACTION_BLUE,
+		FACTION_RED,
+		FACTION_NEUTRAL,
+		FACTION_TOTAL,
+	};
+
+	void InitPath();
+	void AssignPath(GameObject *go);
+	std::vector<Vector3> m_paths;
+	// Other variables for faction's strategy
+
 protected:
 
 	std::vector<GameObject *> m_goList;

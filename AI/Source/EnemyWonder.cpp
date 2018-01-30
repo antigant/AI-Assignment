@@ -57,7 +57,7 @@ void EnemyWonder::Enter(GameObject *go)
 			next.Set(go->curr.x, go->curr.y + steps);
 	}
 
-	BFSLimit(go, next, 5);
+	BFSLimit(go, next, 10);
 }
 
 void EnemyWonder::Update(double dt, GameObject *go)
@@ -70,7 +70,7 @@ void EnemyWonder::Update(double dt, GameObject *go)
 	// Number of steps to walk for
 	steps = Math::RandIntMinMax(2, 4);
 
-	//while (!go->path.empty())
+	//if (!go->path.empty())
 	//{
 	//	// Path finding state
 	//	go->curr = go->path[0];

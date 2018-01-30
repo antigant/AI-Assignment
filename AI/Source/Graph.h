@@ -17,11 +17,21 @@ struct Node
 	std::vector<unsigned> edges;
 };
 
+struct QueueNode // for priority queue
+{
+	unsigned node;
+	float cost;
+
+	QueueNode(unsigned node = 0, float cost = 0) : node(node), cost(cost) {}
+};
+
 class Graph
 {
 public:
 	Graph();
 	~Graph();
+
+	unsigned NearestNode(const Vector3 &pos);
 
 	void AddEdge(unsigned from, unsigned to);
 	void AddNode(Vector3 pos);

@@ -137,8 +137,8 @@ void SceneBase::Init()
 	// +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+= //
 
 	// +=+=+=+=+=+=+=+=+=+=+=+=+= Lab   +=+=+=+=+=+=+=+=+=+=+=+=+= //
-	meshList[GEO_EDGE] = MeshBuilder::GenerateLine("white quad");
-	meshList[GEO_NODE] = MeshBuilder::GenerateSphere("circle", Color(1.f, 0.f, 0.f), 10, 10);
+	meshList[GEO_EDGE] = MeshBuilder::GenerateLine("edge");
+	meshList[GEO_NODE] = MeshBuilder::GenerateSphere("node", Color(1.f, 0.f, 0.f), 10, 10);
 	// +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+= //
 
 	// +=+=+=+=+=+=+=+=+=+=+= Assignment 2  +=+=+=+=+=+=+=+=+=+=+= //

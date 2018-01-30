@@ -25,6 +25,7 @@ void SceneGraph::Init()
 	Math::InitRNG();
 
 	m_graph.Generate(0, m_worldHeight);
+	InitPath();
 }
 
 GameObject* SceneGraph::FetchGO(std::string type)
@@ -39,11 +40,11 @@ GameObject* SceneGraph::FetchGO(std::string type)
 			return go;
 		}
 	}
-	for (unsigned i = 0; i < 5; ++i)
-	{
+	//for (unsigned i = 0; i < 5; ++i)
+	//{
 		GameObject *go = new GameObject(type);
 		m_goList.push_back(go);
-	}
+	//}
 	return FetchGO(type);
 }
 
@@ -112,21 +113,59 @@ void SceneGraph::Update(double dt)
 	if (!bSpaceState && Application::IsKeyPressed(VK_SPACE))
 	{
 		bSpaceState = true;
+		GameObject *go = FetchGO("NPC");
+		go->SetPosition(Vector3(Math::RandFloatMinMax(0, m_worldWidth), Math::RandFloatMinMax(0, m_worldHeight)));
+		go->SetTarget(go->GetPosition());
+		go->currNodeID = m_graph.NearestNode(go->GetPosition());
+		go->gStack.clear();
+		go->gStack.push_back(go->currNodeID);
+		go->visited.resize(m_graph.m_nodes.size(), false);
 	}
 	else if (bSpaceState && !Application::IsKeyPressed(VK_SPACE))
 	{
 		bSpaceState = false;
 	}
-}
 
+	static const float NPC_VELOCITY = 10.f;
+	for (auto go : m_goList)
+	{
+		if (!go->GetActive() && go->GetType() != "NPC")
+			continue;
+		if ((go->GetPosition() - go->GetTarget()).Length() < 1.f)
+		{
+			if (!go->gStack.empty())
+			{
+				DFSOnce(go);
+				go->SetTarget(m_graph.m_nodes[go->currNodeID]->pos);
+			}
+			else if (!go->gPath.empty())
+			{
+				go->SetTarget(go->gPath[0]);
+				go->gPath.erase(go->gPath.begin());
+			}
+			else
+				GoRandomAdjacent(go);
+		}
+		else
+			go->SetPosition(go->GetPosition() += (go->GetTarget() - go->GetPosition()).Normalized() * NPC_VELOCITY * m_speed * static_cast<float>(dt));
+	}
+}
 
 void SceneGraph::RenderGO(GameObject *go)
 {
-
+	if (go->GetType() == "NPC")
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(go->GetPosition().x, go->GetPosition().y, 2.f);
+		modelStack.Scale(5.f, 5.f, 5.f);
+		RenderMesh(meshList[GEO_QUEEN], false);
+		modelStack.PopMatrix();
+	}
 }
 
 void SceneGraph::RenderGraph()
 {
+	// Rendering the nodes
 	for (int i = 0; i < m_graph.m_nodes.size(); ++i)
 	{
 		modelStack.PushMatrix();
@@ -135,13 +174,80 @@ void SceneGraph::RenderGraph()
 		modelStack.PopMatrix();
 	}
 
+	// Rendering the edges
 	for (int i = 0; i < m_graph.m_edges.size(); ++i)
 	{
+		Node *from = m_graph.m_nodes[m_graph.m_edges[i]->from];
+		Node *to = m_graph.m_nodes[m_graph.m_edges[i]->to];
+		float theta = Math::RadianToDegree(atan2(to->pos.y - from->pos.y, to->pos.x - from->pos.x));
+
 		modelStack.PushMatrix();
-		modelStack.Translate(m_graph.m_edges[i]->cost, m_graph.m_edges[i]->cost, m_graph.m_edges[i]->cost);
-		RenderMesh(meshList[GEO_NODE], false);
+		modelStack.Translate(from->pos.x, from->pos.y, from->pos.z);
+		modelStack.Rotate(theta, 0.f, 0.f, 1.f);
+		modelStack.Scale(m_graph.m_edges[i]->cost, 1.f, 1.f);
+		RenderMesh(meshList[GEO_EDGE], false);
 		modelStack.PopMatrix();
 	}
+}
+
+void SceneGraph::GoRandomAdjacent(GameObject *go)
+{
+	// Neighbour Node algorithm
+	unsigned nodeID = m_graph.NearestNode(go->GetPosition());
+	Node *currNode = m_graph.m_nodes[nodeID];
+
+	unsigned RNG = Math::RandIntMinMax(0, currNode->edges.size() - 1);
+	unsigned edgeID = currNode->edges[RNG];
+	Edge *edge = m_graph.m_edges[edgeID];
+	Node *nextNode = m_graph.m_nodes[edge->to];
+	// end of Neighbour Node algorithm
+	go->gPath.push_back(nextNode->pos);
+}
+
+void SceneGraph::DFSOnce(GameObject *go)
+{
+	//go->gStack.push_back(go->currNodeID);
+	//go->visited[go->currNodeID] = true;
+
+	//// Check neighbour nodes
+	//for (auto neighbour : m_graph.m_nodes)
+	//{
+
+	//}
+}
+
+bool SceneGraph::AStar(GameObject *go, unsigned start, unsigned end)
+{
+	//std::vector<bool> visited(m_graph.m_nodes.size(), false);
+	//std::queue<QueueNode> queue;
+	//go->gPath.clear();
+
+	//queue.push(QueueNode(start, 0));
+	//while (!queue.empty())
+	//{
+	//	unsigned curr = queue.front().node;
+	//	QueueNode parent = queue.front();
+	//	queue.pop();
+
+	//	Node *currNode = m_graph.m_nodes[curr];
+	//	QueueNode currQueueNode;
+	//	currQueueNode.node = curr;
+
+	//	currQueueNode.cost = 0;
+	//}
+
+	return false;
+}
+
+void SceneGraph::InitPath()
+{
+
+}
+
+
+void SceneGraph::AssignPath(GameObject *go)
+{
+
 }
 
 void SceneGraph::Render()
@@ -166,6 +272,14 @@ void SceneGraph::Render()
 	modelStack.LoadIdentity();
 
 	RenderMesh(meshList[GEO_AXES], false);
+
+	//Render m_goList
+	for (std::vector<GameObject *>::iterator it = m_goList.begin(); it != m_goList.end(); ++it)
+	{
+		GameObject *go = (GameObject *)*it;
+		if (go->GetActive())
+			RenderGO(go);
+	}
 
 	modelStack.PushMatrix();
 	modelStack.Translate(m_worldHeight * 0.5f, m_worldHeight * 0.5f, -1.f);

@@ -19,6 +19,7 @@ public:
 		TILE_FOG = 0,
 		TILE_EMPTY = 1,
 		TILE_DOOR, // 2
+		TILE_ENEMY,
 	};
 	enum DIRECTION
 	{

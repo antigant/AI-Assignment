@@ -25,6 +25,7 @@ void SceneGraph::Init()
 	Math::InitRNG();
 
 	m_graph.Generate(0, m_worldHeight);
+	InitPath();
 }
 
 GameObject* SceneGraph::FetchGO(std::string type)
@@ -164,6 +165,7 @@ void SceneGraph::RenderGO(GameObject *go)
 
 void SceneGraph::RenderGraph()
 {
+	// Rendering the nodes
 	for (int i = 0; i < m_graph.m_nodes.size(); ++i)
 	{
 		modelStack.PushMatrix();
@@ -172,19 +174,20 @@ void SceneGraph::RenderGraph()
 		modelStack.PopMatrix();
 	}
 
-	//for (int i = 0; i < m_graph.m_edges.size(); ++i)
-	//{
-	//	Node *from = m_graph.m_nodes[m_graph.m_edges[i]->from];
-	//	Node *to = m_graph.m_nodes[m_graph.m_edges[i]->to];
-	//	float theta = atan2(from->pos.Length(), to->pos.Length());
+	// Rendering the edges
+	for (int i = 0; i < m_graph.m_edges.size(); ++i)
+	{
+		Node *from = m_graph.m_nodes[m_graph.m_edges[i]->from];
+		Node *to = m_graph.m_nodes[m_graph.m_edges[i]->to];
+		float theta = Math::RadianToDegree(atan2(to->pos.y - from->pos.y, to->pos.x - from->pos.x));
 
-	//	modelStack.PushMatrix();
-	//	modelStack.Translate(from->pos.x, from->pos.y, from->pos.z);
-	//	modelStack.Rotate(theta, 1.f, 0.f, 0.f);
-	//	modelStack.Scale(m_graph.m_edges[i]->cost, 1.f, 1.f);
-	//	RenderMesh(meshList[GEO_EDGE], false);
-	//	modelStack.PopMatrix();
-	//}
+		modelStack.PushMatrix();
+		modelStack.Translate(from->pos.x, from->pos.y, from->pos.z);
+		modelStack.Rotate(theta, 0.f, 0.f, 1.f);
+		modelStack.Scale(m_graph.m_edges[i]->cost, 1.f, 1.f);
+		RenderMesh(meshList[GEO_EDGE], false);
+		modelStack.PopMatrix();
+	}
 }
 
 void SceneGraph::GoRandomAdjacent(GameObject *go)
@@ -234,6 +237,17 @@ bool SceneGraph::AStar(GameObject *go, unsigned start, unsigned end)
 	//}
 
 	return false;
+}
+
+void SceneGraph::InitPath()
+{
+
+}
+
+
+void SceneGraph::AssignPath(GameObject *go)
+{
+
 }
 
 void SceneGraph::Render()

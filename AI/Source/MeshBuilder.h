@@ -21,7 +21,7 @@ public:
 	static Mesh* GenerateCone(const std::string &meshName, Color color, unsigned numSlice, float radius, float height);
 	static Mesh* GenerateOBJ(const std::string &meshName, const std::string &file_path);
 	static Mesh* GenerateText(const std::string &meshName, unsigned row, unsigned col);
-	static Mesh* GenerateLine(const std::string &meshName, float length = 1.f);
+	static Mesh* GenerateLine(const std::string &meshName, float length = 1.f, Color color = Color(0.f,0.f,0.f));
 };
 
 #endif

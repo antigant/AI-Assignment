@@ -79,16 +79,66 @@ void Graph::Generate(unsigned key, unsigned size)
 	// top lane
 	AddNode(Vector3(5.f, 40.f));
 	AddNode(Vector3(5.f, 75.f));
+	// mid lane
+	AddNode(Vector3(25.f, 25.f));
+	AddNode(Vector3(42.5f, 42.5f));
 	// btm lane
 	AddNode(Vector3(40.f, 5.f));
 	AddNode(Vector3(75.f, 5.f));
+
 	// Dire
 	// top lane
 	AddNode(Vector3(25.f, 95.f));
 	AddNode(Vector3(60.f, 95.f));
+	// mid lane
+	AddNode(Vector3(57.5f, 57.5f));
+	AddNode(Vector3(75.f, 75.f));
+
 	// btm lane
 	AddNode(Vector3(95.f, 60.f));
 	AddNode(Vector3(95.f, 25.f));
 	// Dire ancient
 	AddNode(Vector3(95.f, 95.f));
+
+	// Top lane (Radiant)
+	AddEdge(0, 1);
+	AddEdge(1, 2);
+	AddEdge(2, 7);
+	AddEdge(7, 8);
+	AddEdge(8, 13);
+
+	// Mid lane (Radiant)
+	AddEdge(0, 3);
+	AddEdge(3, 4);
+	AddEdge(4, 9);
+	AddEdge(9, 10);
+	AddEdge(10, 13);
+
+	// Btm lane (Radiant)
+	AddEdge(0, 5);
+	AddEdge(5, 6);
+	AddEdge(6, 12);
+	AddEdge(12, 11);
+	AddEdge(11, 13);
+
+	// Top lane (Dire)
+	AddEdge(13, 8);
+	AddEdge(8, 7);
+	AddEdge(7, 2);
+	AddEdge(2, 1);
+	AddEdge(1, 0);
+
+	// Mid lane (Dire)
+	AddEdge(13, 10);
+	AddEdge(10, 9);
+	AddEdge(9, 4);
+	AddEdge(4, 3);
+	AddEdge(3, 0);
+
+	// Btm lane (Dire)
+	AddEdge(13, 11);
+	AddEdge(11, 12);
+	AddEdge(12, 6);
+	AddEdge(6, 5);
+	AddEdge(5, 0);
 }

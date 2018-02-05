@@ -39,7 +39,7 @@ private:
 
 	void InitPath();
 	void AssignPath(GameObject *go);
-	std::vector<Vector3> m_paths;
+	std::vector<std::vector<Node*>> m_paths;
 	// Other variables for faction's strategy
 
 protected:

@@ -109,22 +109,22 @@ void SceneGraph::Update(double dt)
 		bRButtonState = false;
 		std::cout << "RBUTTON UP" << std::endl;
 	}
-	static bool bSpaceState = false;
-	if (!bSpaceState && Application::IsKeyPressed(VK_SPACE))
-	{
-		bSpaceState = true;
-		GameObject *go = FetchGO("NPC");
-		go->SetPosition(Vector3(Math::RandFloatMinMax(0, m_worldWidth), Math::RandFloatMinMax(0, m_worldHeight)));
-		go->SetTarget(go->GetPosition());
-		go->currNodeID = m_graph.NearestNode(go->GetPosition());
-		go->gStack.clear();
-		go->gStack.push_back(go->currNodeID);
-		go->visited.resize(m_graph.m_nodes.size(), false);
-	}
-	else if (bSpaceState && !Application::IsKeyPressed(VK_SPACE))
-	{
-		bSpaceState = false;
-	}
+	//static bool bSpaceState = false;
+	//if (!bSpaceState && Application::IsKeyPressed(VK_SPACE))
+	//{
+	//	bSpaceState = true;
+	//	GameObject *go = FetchGO("NPC");
+	//	go->SetPosition(Vector3(Math::RandFloatMinMax(0, m_worldWidth), Math::RandFloatMinMax(0, m_worldHeight)));
+	//	go->SetTarget(go->GetPosition());
+	//	go->currNodeID = m_graph.NearestNode(go->GetPosition());
+	//	go->gStack.clear();
+	//	go->gStack.push_back(go->currNodeID);
+	//	go->visited.resize(m_graph.m_nodes.size(), false);
+	//}
+	//else if (bSpaceState && !Application::IsKeyPressed(VK_SPACE))
+	//{
+	//	bSpaceState = false;
+	//}
 
 	static const float NPC_VELOCITY = 10.f;
 	for (auto go : m_goList)
@@ -165,6 +165,7 @@ void SceneGraph::RenderGO(GameObject *go)
 
 void SceneGraph::RenderGraph()
 {
+	std::ostringstream ss;
 	// Rendering the nodes
 	for (int i = 0; i < m_graph.m_nodes.size(); ++i)
 	{
@@ -172,6 +173,15 @@ void SceneGraph::RenderGraph()
 		modelStack.Translate(m_graph.m_nodes[i]->pos.x, m_graph.m_nodes[i]->pos.y, m_graph.m_nodes[i]->pos.z);
 		RenderMesh(meshList[GEO_NODE], false);
 		modelStack.PopMatrix();
+
+		ss.str("");
+		ss << i;
+		modelStack.PushMatrix();
+		modelStack.Translate(m_graph.m_nodes[i]->pos.x, m_graph.m_nodes[i]->pos.y, m_graph.m_nodes[i]->pos.z);
+		modelStack.Scale(5.0f, 5.0f, 5.0f);
+		RenderText(meshList[GEO_TEXT], ss.str(), Color(0.0f, 1.0f, 0.0f));
+		modelStack.PopMatrix();
+
 	}
 
 	// Rendering the edges
@@ -241,7 +251,55 @@ bool SceneGraph::AStar(GameObject *go, unsigned start, unsigned end)
 
 void SceneGraph::InitPath()
 {
+	m_paths.resize(6);
 
+	// Top lane (Radiant)
+	m_paths[0].push_back(m_graph.m_nodes[0]);
+	m_paths[0].push_back(m_graph.m_nodes[1]);
+	m_paths[0].push_back(m_graph.m_nodes[2]);
+	m_paths[0].push_back(m_graph.m_nodes[7]);
+	m_paths[0].push_back(m_graph.m_nodes[8]);
+	m_paths[0].push_back(m_graph.m_nodes[13]);
+
+	// Mid lane (Radiant)
+	m_paths[1].push_back(m_graph.m_nodes[0]);
+	m_paths[1].push_back(m_graph.m_nodes[3]);
+	m_paths[1].push_back(m_graph.m_nodes[4]);
+	m_paths[1].push_back(m_graph.m_nodes[9]);
+	m_paths[1].push_back(m_graph.m_nodes[10]);
+	m_paths[1].push_back(m_graph.m_nodes[13]);
+
+	// Btm lane (Radiant)
+	m_paths[2].push_back(m_graph.m_nodes[0]);
+	m_paths[2].push_back(m_graph.m_nodes[5]);
+	m_paths[2].push_back(m_graph.m_nodes[6]);
+	m_paths[2].push_back(m_graph.m_nodes[12]);
+	m_paths[2].push_back(m_graph.m_nodes[11]);
+	m_paths[2].push_back(m_graph.m_nodes[13]);
+
+	// Top lane (Dire)
+	m_paths[3].push_back(m_graph.m_nodes[13]);
+	m_paths[3].push_back(m_graph.m_nodes[8]);
+	m_paths[3].push_back(m_graph.m_nodes[7]);
+	m_paths[3].push_back(m_graph.m_nodes[2]);
+	m_paths[3].push_back(m_graph.m_nodes[1]);
+	m_paths[3].push_back(m_graph.m_nodes[0]);
+
+	// Mid lane (Dire)
+	m_paths[4].push_back(m_graph.m_nodes[13]);
+	m_paths[4].push_back(m_graph.m_nodes[10]);
+	m_paths[4].push_back(m_graph.m_nodes[9]);
+	m_paths[4].push_back(m_graph.m_nodes[4]);
+	m_paths[4].push_back(m_graph.m_nodes[3]);
+	m_paths[4].push_back(m_graph.m_nodes[0]);
+
+	// Btm lane (Dire)
+	m_paths[5].push_back(m_graph.m_nodes[13]);
+	m_paths[5].push_back(m_graph.m_nodes[11]);
+	m_paths[5].push_back(m_graph.m_nodes[12]);
+	m_paths[5].push_back(m_graph.m_nodes[6]);
+	m_paths[5].push_back(m_graph.m_nodes[5]);
+	m_paths[5].push_back(m_graph.m_nodes[0]);
 }
 
 
@@ -259,7 +317,6 @@ void SceneGraph::Render()
 	projection.SetToOrtho(0, m_worldWidth, 0, m_worldHeight, -10, 10);
 	projectionStack.LoadMatrix(projection);
 
-	RenderGraph();
 
 	// Camera matrix
 	viewStack.LoadIdentity();
@@ -286,6 +343,8 @@ void SceneGraph::Render()
 	modelStack.Scale(m_worldHeight, m_worldHeight, m_worldHeight);
 	RenderMesh(meshList[GEO_WHITEQUAD], false);
 	modelStack.PopMatrix();
+
+	RenderGraph();
 
 	//On screen text
 	std::ostringstream ss;

@@ -68,6 +68,10 @@ public:
 		GEO_ENEMY,
 		GEO_DOOR,
 
+		// Assignment 3
+		RADIANT_CREEP,
+		DIRE_CREEP,
+
 		NUM_GEOMETRY,
 	};
 public:

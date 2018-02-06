@@ -15,6 +15,7 @@ struct Node
 {
 	Vector3 pos;
 	std::vector<unsigned> edges;
+	unsigned id;
 };
 
 struct QueueNode // for priority queue

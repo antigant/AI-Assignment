@@ -13,6 +13,7 @@ class State;
 class GameObject : public ObjectBase
 {
 	std::string type;
+	std::string faction;
 public:
 	GameObject(std::string typeValue);
 	virtual ~GameObject();
@@ -66,6 +67,10 @@ public:
 	void SetMyTurn(const bool myTurn);
 	bool GetMyTurn() const;
 
+	// Assignment 3
+	void SetFaction(const std::string faction);
+	std::string GetFaction(void) const;
+
 //private:
 	// For lab 8 practical
 	std::vector<Maze::TILE_CONTENT> grid;
@@ -80,7 +85,6 @@ public:
 	std::vector<Vector3> gPath;
 
 	// For assignment 
-	int fraction;
 	float hp;
 	float range;
 	float damage;
@@ -107,6 +111,9 @@ protected:
 
 	// Assignment 2
 	bool myTurn;
+
+	// Assignment 3
+
 };
 
 #endif

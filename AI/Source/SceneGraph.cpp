@@ -3,6 +3,8 @@
 #include "Application.h"
 #include <sstream>
 
+#define SPAWN_TIME 2.5f
+
 SceneGraph::SceneGraph()
 {
 }
@@ -24,8 +26,11 @@ void SceneGraph::Init()
 
 	Math::InitRNG();
 
+	// Assignment 3
 	m_graph.Generate(0, m_worldHeight);
 	InitPath();
+	spawn_timer = 0.0;
+	zPosition = 0.0f;
 }
 
 GameObject* SceneGraph::FetchGO(std::string type)
@@ -40,11 +45,11 @@ GameObject* SceneGraph::FetchGO(std::string type)
 			return go;
 		}
 	}
-	//for (unsigned i = 0; i < 5; ++i)
-	//{
+	for (unsigned i = 0; i < 5; ++i)
+	{
 		GameObject *go = new GameObject(type);
 		m_goList.push_back(go);
-	//}
+	}
 	return FetchGO(type);
 }
 
@@ -113,7 +118,7 @@ void SceneGraph::Update(double dt)
 	//if (!bSpaceState && Application::IsKeyPressed(VK_SPACE))
 	//{
 	//	bSpaceState = true;
-	//	GameObject *go = FetchGO("NPC");
+	//	GameObject *go = FetchGO("Creep");
 	//	go->SetPosition(Vector3(Math::RandFloatMinMax(0, m_worldWidth), Math::RandFloatMinMax(0, m_worldHeight)));
 	//	go->SetTarget(go->GetPosition());
 	//	go->currNodeID = m_graph.NearestNode(go->GetPosition());
@@ -126,39 +131,85 @@ void SceneGraph::Update(double dt)
 	//	bSpaceState = false;
 	//}
 
+	spawn_timer += dt * m_speed;
+	if (spawn_timer > SPAWN_TIME)
+	{
+		spawn_timer -= SPAWN_TIME;
+		GameObject *go = FetchGO("creep");
+		go->hp = 10;
+		go->SetPosition(Radiant->pos);
+		go->SetTarget(go->GetPosition());
+		go->SetFaction("radiant");
+		go->currNodeID = Radiant->id;
+		AssignPath(go);
+
+		go = FetchGO("creep");
+		go->hp = 10;
+		go->SetPosition(Dire->pos);
+		go->SetTarget(go->GetPosition());
+		go->SetFaction("dire");
+		go->currNodeID = Dire->id;
+		AssignPath(go);
+	}
+
 	static const float NPC_VELOCITY = 10.f;
 	for (auto go : m_goList)
 	{
-		if (!go->GetActive() && go->GetType() != "NPC")
+		if (!go->GetActive())
 			continue;
-		if ((go->GetPosition() - go->GetTarget()).Length() < 1.f)
+		if ((go->GetPosition() - go->GetTarget()).Length() < 1.f && go->GetType() != "creep")
 		{
-			if (!go->gStack.empty())
-			{
-				DFSOnce(go);
-				go->SetTarget(m_graph.m_nodes[go->currNodeID]->pos);
-			}
-			else if (!go->gPath.empty())
+			if (!go->gPath.empty())
 			{
 				go->SetTarget(go->gPath[0]);
 				go->gPath.erase(go->gPath.begin());
 			}
-			else
-				GoRandomAdjacent(go);
 		}
 		else
 			go->SetPosition(go->GetPosition() += (go->GetTarget() - go->GetPosition()).Normalized() * NPC_VELOCITY * m_speed * static_cast<float>(dt));
+
+		for (std::vector<GameObject*>::iterator it = m_goList.begin() + 1; it != m_goList.end(); ++it)
+		{
+			GameObject *go2 = (GameObject *)*it;
+			if (!go->GetActive() || !go2->GetActive())
+				continue;
+			if (go->GetFaction() == go2->GetFaction())
+				continue;
+			if ((go->GetPosition() - go2->GetPosition()).Length() < 1.0f)
+			{
+				// Range-creeps paused then shoot projectile *wink wink*
+				go->SetActive(false);
+				go2->SetActive(false);
+			}
+		}
+
+		if (!go->GetActive())
+			continue;
+
+		if (go->GetFaction() == "radiant")
+		{
+			if ((go->GetPosition() - m_graph.m_nodes[13]->pos).Length() < 1.0f)
+				go->SetActive(false);
+		}
+		else if (go->GetFaction() == "dire")
+		{
+			if ((go->GetPosition() - m_graph.m_nodes[0]->pos).Length() < 1.0f)
+				go->SetActive(false);
+		}
 	}
 }
 
 void SceneGraph::RenderGO(GameObject *go)
 {
-	if (go->GetType() == "NPC")
+	if (go->GetType() == "creep")
 	{
 		modelStack.PushMatrix();
-		modelStack.Translate(go->GetPosition().x, go->GetPosition().y, 2.f);
-		modelStack.Scale(5.f, 5.f, 5.f);
-		RenderMesh(meshList[GEO_QUEEN], false);
+		modelStack.Translate(go->GetPosition().x, go->GetPosition().y, zPosition);
+		modelStack.Scale(4.0f, 4.0f, 4.0f);
+		if(go->GetFaction() == "radiant")
+			RenderMesh(meshList[RADIANT_CREEP], false);
+		else if(go->GetFaction() == "dire")
+			RenderMesh(meshList[DIRE_CREEP], false);
 		modelStack.PopMatrix();
 	}
 }
@@ -171,6 +222,7 @@ void SceneGraph::RenderGraph()
 	{
 		modelStack.PushMatrix();
 		modelStack.Translate(m_graph.m_nodes[i]->pos.x, m_graph.m_nodes[i]->pos.y, m_graph.m_nodes[i]->pos.z);
+		modelStack.Scale(0.5f, 0.5f, 0.5f);
 		RenderMesh(meshList[GEO_NODE], false);
 		modelStack.PopMatrix();
 
@@ -178,7 +230,7 @@ void SceneGraph::RenderGraph()
 		ss << i;
 		modelStack.PushMatrix();
 		modelStack.Translate(m_graph.m_nodes[i]->pos.x, m_graph.m_nodes[i]->pos.y, m_graph.m_nodes[i]->pos.z);
-		modelStack.Scale(5.0f, 5.0f, 5.0f);
+		modelStack.Scale(4.5f, 4.5f, 4.5f);
 		RenderText(meshList[GEO_TEXT], ss.str(), Color(0.0f, 1.0f, 0.0f));
 		modelStack.PopMatrix();
 
@@ -254,58 +306,73 @@ void SceneGraph::InitPath()
 	m_paths.resize(6);
 
 	// Top lane (Radiant)
-	m_paths[0].push_back(m_graph.m_nodes[0]);
-	m_paths[0].push_back(m_graph.m_nodes[1]);
-	m_paths[0].push_back(m_graph.m_nodes[2]);
-	m_paths[0].push_back(m_graph.m_nodes[7]);
-	m_paths[0].push_back(m_graph.m_nodes[8]);
-	m_paths[0].push_back(m_graph.m_nodes[13]);
+	m_paths[0].push_back(m_graph.m_nodes[0]->pos);
+	m_paths[0].push_back(m_graph.m_nodes[1]->pos);
+	m_paths[0].push_back(m_graph.m_nodes[2]->pos);
+	m_paths[0].push_back(m_graph.m_nodes[7]->pos);
+	m_paths[0].push_back(m_graph.m_nodes[8]->pos);
+	m_paths[0].push_back(m_graph.m_nodes[13]->pos);
 
 	// Mid lane (Radiant)
-	m_paths[1].push_back(m_graph.m_nodes[0]);
-	m_paths[1].push_back(m_graph.m_nodes[3]);
-	m_paths[1].push_back(m_graph.m_nodes[4]);
-	m_paths[1].push_back(m_graph.m_nodes[9]);
-	m_paths[1].push_back(m_graph.m_nodes[10]);
-	m_paths[1].push_back(m_graph.m_nodes[13]);
+	m_paths[1].push_back(m_graph.m_nodes[0]->pos);
+	m_paths[1].push_back(m_graph.m_nodes[3]->pos);
+	m_paths[1].push_back(m_graph.m_nodes[4]->pos);
+	m_paths[1].push_back(m_graph.m_nodes[9]->pos);
+	m_paths[1].push_back(m_graph.m_nodes[10]->pos);
+	m_paths[1].push_back(m_graph.m_nodes[13]->pos);
 
 	// Btm lane (Radiant)
-	m_paths[2].push_back(m_graph.m_nodes[0]);
-	m_paths[2].push_back(m_graph.m_nodes[5]);
-	m_paths[2].push_back(m_graph.m_nodes[6]);
-	m_paths[2].push_back(m_graph.m_nodes[12]);
-	m_paths[2].push_back(m_graph.m_nodes[11]);
-	m_paths[2].push_back(m_graph.m_nodes[13]);
+	m_paths[2].push_back(m_graph.m_nodes[0]->pos);
+	m_paths[2].push_back(m_graph.m_nodes[5]->pos);
+	m_paths[2].push_back(m_graph.m_nodes[6]->pos);
+	m_paths[2].push_back(m_graph.m_nodes[12]->pos);
+	m_paths[2].push_back(m_graph.m_nodes[11]->pos);
+	m_paths[2].push_back(m_graph.m_nodes[13]->pos);
 
 	// Top lane (Dire)
-	m_paths[3].push_back(m_graph.m_nodes[13]);
-	m_paths[3].push_back(m_graph.m_nodes[8]);
-	m_paths[3].push_back(m_graph.m_nodes[7]);
-	m_paths[3].push_back(m_graph.m_nodes[2]);
-	m_paths[3].push_back(m_graph.m_nodes[1]);
-	m_paths[3].push_back(m_graph.m_nodes[0]);
+	m_paths[3].push_back(m_graph.m_nodes[13]->pos);
+	m_paths[3].push_back(m_graph.m_nodes[8]->pos);
+	m_paths[3].push_back(m_graph.m_nodes[7]->pos);
+	m_paths[3].push_back(m_graph.m_nodes[2]->pos);
+	m_paths[3].push_back(m_graph.m_nodes[1]->pos);
+	m_paths[3].push_back(m_graph.m_nodes[0]->pos);
 
 	// Mid lane (Dire)
-	m_paths[4].push_back(m_graph.m_nodes[13]);
-	m_paths[4].push_back(m_graph.m_nodes[10]);
-	m_paths[4].push_back(m_graph.m_nodes[9]);
-	m_paths[4].push_back(m_graph.m_nodes[4]);
-	m_paths[4].push_back(m_graph.m_nodes[3]);
-	m_paths[4].push_back(m_graph.m_nodes[0]);
+	m_paths[4].push_back(m_graph.m_nodes[13]->pos);
+	m_paths[4].push_back(m_graph.m_nodes[10]->pos);
+	m_paths[4].push_back(m_graph.m_nodes[9]->pos);
+	m_paths[4].push_back(m_graph.m_nodes[4]->pos);
+	m_paths[4].push_back(m_graph.m_nodes[3]->pos);
+	m_paths[4].push_back(m_graph.m_nodes[0]->pos);
 
 	// Btm lane (Dire)
-	m_paths[5].push_back(m_graph.m_nodes[13]);
-	m_paths[5].push_back(m_graph.m_nodes[11]);
-	m_paths[5].push_back(m_graph.m_nodes[12]);
-	m_paths[5].push_back(m_graph.m_nodes[6]);
-	m_paths[5].push_back(m_graph.m_nodes[5]);
-	m_paths[5].push_back(m_graph.m_nodes[0]);
+	m_paths[5].push_back(m_graph.m_nodes[13]->pos);
+	m_paths[5].push_back(m_graph.m_nodes[11]->pos);
+	m_paths[5].push_back(m_graph.m_nodes[12]->pos);
+	m_paths[5].push_back(m_graph.m_nodes[6]->pos);
+	m_paths[5].push_back(m_graph.m_nodes[5]->pos);
+	m_paths[5].push_back(m_graph.m_nodes[0]->pos);
+
+	Radiant = m_graph.m_nodes[0];
+	Dire = m_graph.m_nodes[13];
 }
 
 
 void SceneGraph::AssignPath(GameObject *go)
 {
+	// AI Pattern
+	if (go->GetFaction() == "radiant")
+	{
+		static int radiant_lane = Math::RandIntMinMax(0, 2);
+		go->gPath = m_paths[radiant_lane++];
+		if (radiant_lane > 3)
+			radiant_lane = 0;
+	}
 
+	else if (go->GetFaction() == "dire")
+	{
+		go->gPath = m_paths[Math::RandIntMinMax(3, 5)];
+	}
 }
 
 void SceneGraph::Render()
@@ -331,8 +398,10 @@ void SceneGraph::Render()
 	RenderMesh(meshList[GEO_AXES], false);
 
 	//Render m_goList
+	zPosition = 0.0f;
 	for (std::vector<GameObject *>::iterator it = m_goList.begin(); it != m_goList.end(); ++it)
 	{
+		zPosition += 0.001f;
 		GameObject *go = (GameObject *)*it;
 		if (go->GetActive())
 			RenderGO(go);

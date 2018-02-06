@@ -29,18 +29,14 @@ private:
 	void DFSOnce(GameObject *go);
 	bool AStar(GameObject *go, unsigned start, unsigned end);
 
-	enum FACTIONS
-	{
-		FACTION_BLUE,
-		FACTION_RED,
-		FACTION_NEUTRAL,
-		FACTION_TOTAL,
-	};
-
 	void InitPath();
 	void AssignPath(GameObject *go);
-	std::vector<std::vector<Node*>> m_paths;
+	std::vector<std::vector<Vector3>> m_paths;
 	// Other variables for faction's strategy
+	Node *Radiant;
+	Node *Dire;
+	double spawn_timer;
+	float zPosition;
 
 protected:
 

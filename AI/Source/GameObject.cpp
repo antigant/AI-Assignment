@@ -230,3 +230,13 @@ bool GameObject::GetMyTurn() const
 {
 	return myTurn;
 }
+
+void GameObject::SetFaction(const std::string faction)
+{
+	this->faction = faction;
+}
+
+std::string GameObject::GetFaction(void) const
+{
+	return faction;
+}

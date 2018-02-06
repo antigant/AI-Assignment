@@ -46,15 +46,17 @@ void Graph::AddEdge(unsigned from, unsigned to)
 	}
 
 	// Allocate to related node
-	m_nodes[from]->edges.push_back(m_edges.size());
-
+	if(from < m_nodes.size())
+		m_nodes[from]->edges.push_back(m_edges.size());
 	m_edges.push_back(newEdge);
 }
 
 void Graph::AddNode(Vector3 pos)
 {
+	static unsigned count = -1;
 	Node *newNode = new Node;
 	newNode->pos = pos;
+	newNode->id = ++count;
 	m_nodes.push_back(newNode);
 }
 

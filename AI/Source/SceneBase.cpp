@@ -150,6 +150,13 @@ void SceneBase::Init()
 	meshList[GEO_DOOR]->textureID = LoadTGA("Image//door.tga");
 	// +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+= //
 
+	// +=+=+=+=+=+=+=+=+=+=+= Assignment 3  +=+=+=+=+=+=+=+=+=+=+= //
+	meshList[RADIANT_CREEP] = MeshBuilder::GenerateQuad("radiant_creep", Color(1.f, 1.f, 1.f));
+	meshList[RADIANT_CREEP]->textureID = LoadTGA("Image//radiant_creep.tga");
+	meshList[DIRE_CREEP] = MeshBuilder::GenerateQuad("dire_creep", Color(1.f, 1.f, 1.f));
+	meshList[DIRE_CREEP]->textureID = LoadTGA("Image//dire_creep.tga");
+	// +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+= //
+
 	bLightEnabled = false;
 }
 
